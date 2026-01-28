@@ -4,6 +4,7 @@ public with sharing class DemoAccountService {
             return;
         }
 
+        /* [BRANCH CHANGE] This comment is specific to feature/contact-logic */
         List<Account> accounts = new List<Account>();
         
         for (Integer i = 0; i < countToCreate; i++) {
@@ -12,6 +13,9 @@ public with sharing class DemoAccountService {
             ));
         }
         insert accounts;
-        // End of method - No contacts created here on Main
+
+        // --- NEW DEPENDENCY ADDED IN THIS BRANCH ---
+        // This line creates a graph edge: DemoAccountService -> USES -> DemoContactService
+        DemoContactService.createRelatedContacts(accounts); 
     }
 }
