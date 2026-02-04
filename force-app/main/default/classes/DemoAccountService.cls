@@ -10,7 +10,7 @@ public with sharing class DemoAccountService {
             String proposedName = 'Demo Account ' + String.valueOf(i + 1);
 
             //inner loop test
-            //checking ghost test jataka jhbjhbhgh
+            //checking ghost test jataka jhbjhbhghhgjh
             
 
             // --- INTRODUCING THE LOGIC BREAK HERE ---
