@@ -8,15 +8,15 @@
                 <p>This UI was updated automatically by GitHub Actions!</p>
             </div>
             <div class="slds-m-bottom_small">
-                <lightning-input label="VIP Client Name" data-id="accName" required></lightning-input>
+                <lightning-input label="Client Name" data-id="accName" required></lightning-input>
             </div>
             <div class="slds-m-bottom_small">
-                <lightning-input type="tel" label="Emergency Contact" data-id="accPhone"></lightning-input>
+                <lightning-input type="tel" label="Contact" data-id="accPhone" required></lightning-input>
             </div>
             <div class="slds-align_absolute-center slds-m-top_medium">
                 <lightning-button 
                     variant="destructive" 
-                    label="CREATE VIP ACCOUNT" 
+                    label="CREATE ACCOUNT" 
                     title="Create Account" 
                     onclick={handleCreate}
                     class="create-btn">
