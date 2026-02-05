@@ -8,15 +8,17 @@ export default class QuickAccountWizard extends LightningElement {
     handleCreate() {
         const nameInput = this.template.querySelector('[data-id="accName"]');
         const phoneInput = this.template.querySelector('[data-id="accPhone"]');
+        const ageInput = this.template.querySelector('[data-id="accAge"]');
         
         const name = nameInput.value;
         const phone = phoneInput.value;
+        const age = ageInput.value;
 
         if (!name) {
             nameInput.reportValidity();
             return;
         }
-        
+
         // NEW LOGIC: Check if Phone is valid
         // The current test does NOT fill this, so this block will fire
         if (!phone) {
@@ -25,8 +27,16 @@ export default class QuickAccountWizard extends LightningElement {
             return; // Stop execution (Test will time out waiting for success)
         }
         // --- CHANGE END ---
+        if (!age) {
+            ageInput.setCustomValidity("Age is required for insurance purposes!");
+            ageInput.reportValidity();
+            return; // STOP HERE -> This will cause the test to fail
+        } else {
+            ageInput.setCustomValidity(""); 
+            ageInput.reportValidity();
+        }
 
-        createAccount({ name: name, phone: phone })
+        createAccount({ name: name, phone: phone ,age: parseInt(age)})
             .then(result => {
                 this.message = `Success! Created account: ${result.Name}`;
                 this.dispatchEvent(
@@ -39,6 +49,7 @@ export default class QuickAccountWizard extends LightningElement {
                 // Clear inputs
                 nameInput.value = '';
                 phoneInput.value = '';
+                ageInput.value = '';
             })
             .catch(error => {
                 this.message = 'Error creating account';
