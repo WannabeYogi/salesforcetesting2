@@ -4,39 +4,32 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class QuickAccountWizard extends LightningElement {
     @track message = '';
+    
+    // Track values to control button state
+    @track name = '';
+    @track phone = '';
+    @track age = '';
+
+    // Capture input changes in real-time
+    handleInputChange(event) {
+        const field = event.target.dataset.id;
+        const val = event.target.value;
+
+        if (field === 'accName') this.name = val;
+        if (field === 'accPhone') this.phone = val;
+        if (field === 'accAge') this.age = val;
+    }
+
+    // Button is disabled if ANY field is empty
+    get isButtonDisabled() {
+        return !(this.name && this.phone && this.age);
+    }
 
     handleCreate() {
-        const nameInput = this.template.querySelector('[data-id="accName"]');
-        const phoneInput = this.template.querySelector('[data-id="accPhone"]');
-        const ageInput = this.template.querySelector('[data-id="accAge"]');
-        
-        const name = nameInput.value;
-        const phone = phoneInput.value;
-        const age = ageInput.value;
+        // Double check validation (Redundant but safe)
+        if (this.isButtonDisabled) return;
 
-        if (!name) {
-            nameInput.reportValidity();
-            return;
-        }
-
-        // NEW LOGIC: Check if Phone is valid
-        // The current test does NOT fill this, so this block will fire
-        if (!phone) {
-            phoneInput.setCustomValidity("Emergency Contact is MANDATORY for VIP Accounts!");
-            phoneInput.reportValidity();
-            return; // Stop execution (Test will time out waiting for success)
-        }
-        // --- CHANGE END ---
-        if (!age) {
-            ageInput.setCustomValidity("Age is required for insurance purposes!");
-            ageInput.reportValidity();
-            return; // STOP HERE -> This will cause the test to fail
-        } else {
-            ageInput.setCustomValidity(""); 
-            ageInput.reportValidity();
-        }
-
-        createAccount({ name: name, phone: phone ,age: parseInt(age)})
+        createAccount({ name: this.name, phone: this.phone, age: parseInt(this.age) })
             .then(result => {
                 this.message = `Success! Created account: ${result.Name}`;
                 this.dispatchEvent(
@@ -46,11 +39,12 @@ export default class QuickAccountWizard extends LightningElement {
                         variant: 'success'
                     })
                 );
-                // Clear inputs
-                //yo mic check
-                nameInput.value = '';
-                phoneInput.value = '';
-                ageInput.value = '';
+                // Clear state
+                this.name = '';
+                this.phone = '';
+                this.age = '';
+                // Clear UI inputs
+                this.template.querySelectorAll('lightning-input').forEach(input => input.value = '');
             })
             .catch(error => {
                 this.message = 'Error creating account';

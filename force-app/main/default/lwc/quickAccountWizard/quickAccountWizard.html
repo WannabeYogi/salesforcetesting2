@@ -1,30 +1,58 @@
 <template>
     <lightning-card title="🔥 URGENT ACCOUNT WIZARD" icon-name="custom:custom1">
         <div class="slds-p-around_medium" style="background-color: #ffeaea; border: 2px solid red; border-radius: 5px;">
+            
             <div class="slds-text-align_center slds-m-bottom_medium">
                 <h1 class="slds-text-heading_large" style="color: red; font-weight: bold;">
                     CI/CD DEPLOYMENT VERIFIED
                 </h1>
                 <p>This UI was updated automatically by GitHub Actions!</p>
             </div>
+
             <div class="slds-m-bottom_small">
-                <lightning-input label="Client Name" data-id="accName" required></lightning-input>
+                <!-- ADDED onchange -->
+                <lightning-input 
+                    label="VIP Client Name" 
+                    data-id="accName" 
+                    required 
+                    onchange={handleInputChange}>
+                </lightning-input>
             </div>
+            
             <div class="slds-m-bottom_small">
-                <lightning-input type="tel" label="Contact" data-id="accPhone" required></lightning-input>
+                <!-- ADDED onchange -->
+                <lightning-input 
+                    type="tel" 
+                    label="Contact" 
+                    data-id="accPhone" 
+                    required 
+                    onchange={handleInputChange}>
+                </lightning-input>
             </div>
+
             <div class="slds-m-bottom_small">
-                <lightning-input type="number" label="Age" data-id="accAge" required></lightning-input>
+                <!-- ADDED onchange -->
+                <lightning-input 
+                    type="number" 
+                    label="Age" 
+                    data-id="accAge" 
+                    required 
+                    onchange={handleInputChange}>
+                </lightning-input>
             </div>
+            
             <div class="slds-align_absolute-center slds-m-top_medium">
+                <!-- ADDED disabled binding -->
                 <lightning-button 
                     variant="destructive" 
-                    label="CREATE ACCOUNT" 
+                    label="CREATE VIP ACCOUNT" 
                     title="Create Account" 
                     onclick={handleCreate}
+                    disabled={isButtonDisabled}
                     class="create-btn">
                 </lightning-button>
             </div>
+
             <template if:true={message}>
                 <div class="slds-m-top_medium slds-text-color_success slds-align_absolute-center slds-text-heading_small">
                     <b>{message}</b>
