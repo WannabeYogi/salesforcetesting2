@@ -1,4 +1,8 @@
-// Add a usage of Status__jbjjcjhdjhjdjbfj4bdbejkcbkjebcjbjbcebnfd
-if (String.isBlank(acc.Status__c)) {
-    acc.Status__c = 'Active';
+public with sharing class DemoAccountTriggerHandler {
+    public static void handleBeforeInsert(List<Account> newAccounts) {
+        for (Account acc : newAccounts) {
+            // Logic to be executed before insert
+            System.debug('Processing Account: ' + acc.Name);
+        }
+    }
 }
