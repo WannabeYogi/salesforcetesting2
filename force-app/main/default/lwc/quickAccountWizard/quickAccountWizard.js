@@ -26,7 +26,7 @@ export default class QuickAccountWizard extends LightningElement {
     }
 
     handleCreate() {
-        // Double check validation (Redundant but safe)
+        // Double check validation (Redundant but safe) efve
         if (this.isButtonDisabled) return;
 
         createAccount({ name: this.name, phone: this.phone, age: parseInt(this.age) })
