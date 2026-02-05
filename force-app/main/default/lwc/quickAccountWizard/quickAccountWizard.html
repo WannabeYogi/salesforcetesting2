@@ -1,27 +1,30 @@
 <template>
-    <lightning-card title="✨ Quick Account Wizard" icon-name="standard:account">
-        <div class="slds-p-around_medium">
-            <div class="slds-m-bottom_small">
-                <lightning-input label="Account Name" data-id="accName" required></lightning-input>
+    <lightning-card title="🔥 URGENT ACCOUNT WIZARD" icon-name="custom:custom1">
+        <div class="slds-p-around_medium" style="background-color: #ffeaea; border: 2px solid red; border-radius: 5px;">
+            <div class="slds-text-align_center slds-m-bottom_medium">
+                <h1 class="slds-text-heading_large" style="color: red; font-weight: bold;">
+                    CI/CD DEPLOYMENT VERIFIED
+                </h1>
+                <p>This UI was updated automatically by GitHub Actions!</p>
             </div>
             <div class="slds-m-bottom_small">
-                <lightning-input type="tel" label="Phone Number" data-id="accPhone"></lightning-input>
+                <lightning-input label="VIP Client Name" data-id="accName" required></lightning-input>
             </div>
-            
+            <div class="slds-m-bottom_small">
+                <lightning-input type="tel" label="Emergency Contact" data-id="accPhone"></lightning-input>
+            </div>
             <div class="slds-align_absolute-center slds-m-top_medium">
-                <!-- This is the button Kamikaze will interact with -->
                 <lightning-button 
-                    variant="brand" 
-                    label="Create Account" 
+                    variant="destructive" 
+                    label="CREATE VIP ACCOUNT" 
                     title="Create Account" 
                     onclick={handleCreate}
                     class="create-btn">
                 </lightning-button>
             </div>
-
             <template if:true={message}>
-                <div class="slds-m-top_medium slds-text-color_success slds-align_absolute-center">
-                    {message}
+                <div class="slds-m-top_medium slds-text-color_success slds-align_absolute-center slds-text-heading_small">
+                    <b>{message}</b>
                 </div>
             </template>
         </div>
