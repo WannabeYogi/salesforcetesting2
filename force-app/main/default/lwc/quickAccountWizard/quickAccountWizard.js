@@ -16,6 +16,15 @@ export default class QuickAccountWizard extends LightningElement {
             nameInput.reportValidity();
             return;
         }
+        
+        // NEW LOGIC: Check if Phone is valid
+        // The current test does NOT fill this, so this block will fire
+        if (!phone) {
+            phoneInput.setCustomValidity("Emergency Contact is MANDATORY for VIP Accounts!");
+            phoneInput.reportValidity();
+            return; // Stop execution (Test will time out waiting for success)
+        }
+        // --- CHANGE END ---
 
         createAccount({ name: name, phone: phone })
             .then(result => {
