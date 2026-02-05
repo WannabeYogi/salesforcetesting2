@@ -75,7 +75,7 @@ export default class QuickAccountWizard extends LightningElement {
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
-            // Clear Inputs
+            // Clear Inputs yh
             this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
                 input.value = null;
             });
