@@ -1,61 +1,88 @@
 import { LightningElement, track } from 'lwc';
 import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class QuickAccountWizard extends LightningElement {
-    @track message = '';
-    
-    // Track values to control button state
-    @track name = '';
-    @track phone = '';
-    @track age = '';
+    @track successMessage = '';
+    @track errorMessage = '';
 
-    // Capture input changes in real-time
-    handleInputChange(event) {
-        const field = event.target.dataset.id;
-        const val = event.target.value;
+    // Form Data
+    formData = {
+        name: '',
+        accNumber: '',
+        phone: '',
+        website: '',
+        industry: '',
+        revenue: null,
+        employees: null,
+        city: ''
+    };
 
-        if (field === 'accName') this.name = val;
-        if (field === 'accPhone') this.phone = val;
-        if (field === 'accAge') this.age = val;
+    // Options for the Industry Picklist
+    get industryOptions() {
+        return [
+            { label: 'Technology', value: 'Technology' },
+            { label: 'Finance', value: 'Finance' },
+            { label: 'Healthcare', value: 'Healthcare' },
+            { label: 'Retail', value: 'Retail' }
+        ];
     }
 
-    // Button is disabled if ANY field is empty
-    get isButtonDisabled() {
-        return !(this.name && this.phone && this.age);
+    handleInputChange(event) {
+        const fieldMap = {
+            'accName': 'name',
+            'accNumber': 'accNumber',
+            'accPhone': 'phone',
+            'accWebsite': 'website',
+            'accIndustry': 'industry',
+            'accRevenue': 'revenue',
+            'accEmployees': 'employees',
+            'accCity': 'city'
+        };
+
+        const fieldId = event.target.dataset.id;
+        const key = fieldMap[fieldId];
+        
+        if (key) {
+            this.formData[key] = event.target.value;
+        }
     }
 
     handleCreate() {
-        // Double check validation (Redundant but safe) efve jghd
-        if (this.isButtonDisabled) return;
+        this.successMessage = '';
+        this.errorMessage = '';
 
-        createAccount({ name: this.name, phone: this.phone, age: parseInt(this.age) })
-            .then(result => {
-                this.message = `Success! Created account: ${result.Name}`;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Account created successfully!',
-                        variant: 'success'
-                    })
-                );
-                // Clear state
-                this.name = '';
-                this.phone = '';
-                this.age = '';
-                // Clear UI inputs
-                this.template.querySelectorAll('lightning-input').forEach(input => input.value = '');
-            })
-            //jknhjhjhbjbieuihguiheioghoeh
-            .catch(error => {
-                this.message = 'Error creating account';
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error',
-                        message: error.body.message,
-                        variant: 'error'
-                    })
-                );
+        // Validation
+        const nameInput = this.template.querySelector('[data-id="accName"]');
+        if (!this.formData.name) {
+            nameInput.setCustomValidity("Account Name is required.");
+            nameInput.reportValidity();
+            return;
+        } else {
+            nameInput.setCustomValidity("");
+            nameInput.reportValidity();
+        }
+
+        // Call Apex
+        createAccount({ 
+            name: this.formData.name,
+            accNumber: this.formData.accNumber,
+            phone: this.formData.phone,
+            website: this.formData.website,
+            industry: this.formData.industry,
+            revenue: this.formData.revenue,
+            employees: this.formData.employees,
+            city: this.formData.city
+        })
+        .then(result => {
+            this.successMessage = `Account "${result.Name}" created successfully!`;
+            // Clear Inputs
+            this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
+                input.value = null;
             });
+            this.formData = {}; // Reset data
+        })
+        .catch(error => {
+            this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
+        });
     }
 }
