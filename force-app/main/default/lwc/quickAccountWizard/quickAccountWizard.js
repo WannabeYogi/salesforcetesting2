@@ -6,7 +6,7 @@ export default class QuickAccountWizard extends LightningElement {
     @track errorMessage = '';
 
     // Form Data
-    formData = {
+    @track formData = {
         name: '',
         accNumber: '',
         phone: '',
@@ -17,7 +17,6 @@ export default class QuickAccountWizard extends LightningElement {
         city: ''
     };
 
-    // Options for the Industry Picklist
     get industryOptions() {
         return [
             { label: 'Technology', value: 'Technology' },
@@ -25,6 +24,20 @@ export default class QuickAccountWizard extends LightningElement {
             { label: 'Healthcare', value: 'Healthcare' },
             { label: 'Retail', value: 'Retail' }
         ];
+    }
+
+    // --- NEW LOGIC: Button State ---
+    get isSaveDisabled() {
+        // 1. Name is mandatory
+        if (!this.formData.name) return true;
+
+        // 2. Revenue must be >= 10,000,000
+        // If revenue is missing OR less than 10M, disable button
+        if (!this.formData.revenue || this.formData.revenue < 10000000) {
+            return true;
+        }
+
+        return false;
     }
 
     handleInputChange(event) {
@@ -44,6 +57,17 @@ export default class QuickAccountWizard extends LightningElement {
         
         if (key) {
             this.formData[key] = event.target.value;
+            
+            // Optional: Show immediate error on the field for better screenshot
+            if (fieldId === 'accRevenue') {
+                const inputCmp = this.template.querySelector('[data-id="accRevenue"]');
+                if (this.formData.revenue < 10000000) {
+                    inputCmp.setCustomValidity("Revenue must be $10M+ for Enterprise Accounts.");
+                } else {
+                    inputCmp.setCustomValidity("");
+                }
+                inputCmp.reportValidity();
+            }
         }
     }
 
@@ -51,18 +75,9 @@ export default class QuickAccountWizard extends LightningElement {
         this.successMessage = '';
         this.errorMessage = '';
 
-        // Validation
-        const nameInput = this.template.querySelector('[data-id="accName"]');
-        if (!this.formData.name) {
-            nameInput.setCustomValidity("Account Name is required.");
-            nameInput.reportValidity();
-            return;
-        } else {
-            nameInput.setCustomValidity("");
-            nameInput.reportValidity();
-        }
+        // Double check (redundant but safe)
+        if (this.isSaveDisabled) return;
 
-        // Call Apex
         createAccount({ 
             name: this.formData.name,
             accNumber: this.formData.accNumber,
@@ -75,11 +90,10 @@ export default class QuickAccountWizard extends LightningElement {
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
-            // Clear Inputs yh
             this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
                 input.value = null;
             });
-            this.formData = {}; // Reset data
+            this.formData = {}; 
         })
         .catch(error => {
             this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);

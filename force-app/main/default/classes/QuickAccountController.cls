@@ -11,6 +11,13 @@ public with sharing class QuickAccountController {
         String city
     ) {
         try {
+            // --- NEW BUSINESS LOGIC ---
+            // Requirement: Enterprise accounts must have > $10M Revenue
+            if (revenue != null && revenue < 10000000) {
+                throw new AuraHandledException('Business Rule Violation: Enterprise Accounts must have Annual Revenue of at least $10,000,000.');
+            }
+            // --------------------------
+
             Account newAcc = new Account(
                 Name = name,
                 AccountNumber = accNumber,
@@ -22,25 +29,22 @@ public with sharing class QuickAccountController {
                 BillingCity = city
             );
             
-            // --- FIX FOR DUPLICATES ---
-            // Create DML Options to override Duplicate Rules
+            // Allow duplicates for demo purposes
             Database.DMLOptions dml = new Database.DMLOptions();
-            dml.DuplicateRuleHeader.allowSave = true; // <--- This forces the save
+            dml.DuplicateRuleHeader.allowSave = true; 
             dml.DuplicateRuleHeader.runAsCurrentUser = true;
             
-            // Use Database.insert instead of standard insert
             Database.SaveResult sr = Database.insert(newAcc, dml);
             
             if (sr.isSuccess()) {
                 return newAcc;
             } else {
-                // If it failed for another reason, throw exception
                 throw new AuraHandledException('Error: ' + sr.getErrors()[0].getMessage());
             }
-            // --------------------------
 
         } catch (Exception e) {
-            throw new AuraHandledException('Error creating account: ' + e.getMessage());
+            // Pass the error back to the LWC
+            throw new AuraHandledException(e.getMessage());
         }
     }
 }
