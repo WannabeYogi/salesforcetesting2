@@ -1,45 +1,102 @@
 import { LightningElement, track } from 'lwc';
 import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class QuickAccountWizard extends LightningElement {
-    @track message = '';
+    @track successMessage = '';
+    @track errorMessage = '';
+
+    // Form Data
+    @track formData = {
+        name: '',
+        accNumber: '',
+        phone: '',
+        website: '',
+        industry: '',
+        revenue: null,
+        employees: null,
+        city: ''
+    };
+
+    get industryOptions() {
+        return [
+            { label: 'Technology', value: 'Technology' },
+            { label: 'Finance', value: 'Finance' },
+            { label: 'Healthcare', value: 'Healthcare' },
+            { label: 'Retail', value: 'Retail' }
+        ];
+    }
+
+    // --- NEW LOGIC: Button State ---
+    get isSaveDisabled() {
+        // 1. Name is mandatory
+        if (!this.formData.name) return true;
+
+        // 2. Revenue must be >= 10,000,000
+        // If revenue is missing OR less than 10M, disable button
+        // if (!this.formData.revenue || this.formData.revenue < 10000000) {
+        //     return true;
+        // }
+
+        return false;
+    }
+
+    handleInputChange(event) {
+        const fieldMap = {
+            'accName': 'name',
+            'accNumber': 'accNumber',
+            'accPhone': 'phone',
+            'accWebsite': 'website',
+            'accIndustry': 'industry',
+            'accRevenue': 'revenue',
+            'accEmployees': 'employees',
+            'accCity': 'city'
+        };
+
+        const fieldId = event.target.dataset.id;
+        const key = fieldMap[fieldId];
+        
+        if (key) {
+            this.formData[key] = event.target.value;
+            
+            //Optional: Show immediate error on the field for better screenshot
+            // if (fieldId === 'accRevenue') {
+            //     const inputCmp = this.template.querySelector('[data-id="accRevenue"]');
+            //     if (this.formData.revenue < 10000000) {
+            //         inputCmp.setCustomValidity("Revenue must be $10M+ for Enterprise Accounts.");
+            //     } else {
+            //         inputCmp.setCustomValidity("");
+            //     }
+            //     inputCmp.reportValidity();
+            // }
+        }
+    }
 
     handleCreate() {
-        const nameInput = this.template.querySelector('[data-id="accName"]');
-        const phoneInput = this.template.querySelector('[data-id="accPhone"]');
-        
-        const name = nameInput.value;
-        const phone = phoneInput.value;
+        this.successMessage = '';
+        this.errorMessage = '';
 
-        if (!name) {
-            nameInput.reportValidity();
-            return;
-        }
+        // Double check (redundant but safe)
+        if (this.isSaveDisabled) return;
 
-        createAccount({ name: name, phone: phone })
-            .then(result => {
-                this.message = `Success! Created account: ${result.Name}`;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Account created successfully!',
-                        variant: 'success'
-                    })
-                );
-                // Clear inputs
-                nameInput.value = '';
-                phoneInput.value = '';
-            })
-            .catch(error => {
-                this.message = 'Error creating account';
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error',
-                        message: error.body.message,
-                        variant: 'error'
-                    })
-                );
+        createAccount({ 
+            name: this.formData.name,
+            accNumber: this.formData.accNumber,
+            phone: this.formData.phone,
+            website: this.formData.website,
+            industry: this.formData.industry,
+            revenue: this.formData.revenue,
+            employees: this.formData.employees,
+            city: this.formData.city
+        })
+        .then(result => {
+            this.successMessage = `Account "${result.Name}" created successfully!`;
+            this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
+                input.value = null;
             });
+            this.formData = {}; 
+        })
+        .catch(error => {
+            this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
+        });
     }
 }
