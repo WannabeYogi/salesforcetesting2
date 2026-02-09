@@ -11,19 +11,12 @@ export default class QuickAccountWizard extends LightningElement {
         phone: '',
         website: '',
         industry: '',
-        revenue: '', // Changed to string to accept input
+        revenue: '', 
         employees: null,
         city: ''
     };
 
-    get industryOptions() {
-        return [
-            { label: 'Technology', value: 'Technology' },
-            { label: 'Finance', value: 'Finance' },
-            { label: 'Healthcare', value: 'Healthcare' },
-            { label: 'Retail', value: 'Retail' }
-        ];
-    }
+    // REMOVED: get industryOptions() {...} is no longer needed
 
     handleInputChange(event) {
         const fieldMap = {
@@ -59,15 +52,12 @@ export default class QuickAccountWizard extends LightningElement {
             nameInput.reportValidity();
         }
 
-        // --- DATA CLEANING ---
-        // Convert "$5,000,000" -> "5000000"
+        // Clean Revenue Logic
         let cleanRevenue = 0;
         if (this.formData.revenue) {
-            // Remove everything that is NOT a digit or a dot
             const stringVal = String(this.formData.revenue).replace(/[^0-9.]/g, '');
             cleanRevenue = parseFloat(stringVal);
         }
-        // ---------------------
 
         createAccount({ 
             name: this.formData.name,
@@ -75,7 +65,7 @@ export default class QuickAccountWizard extends LightningElement {
             phone: this.formData.phone,
             website: this.formData.website,
             industry: this.formData.industry,
-            revenue: cleanRevenue, // Send clean number
+            revenue: cleanRevenue,
             employees: this.formData.employees,
             city: this.formData.city
         })

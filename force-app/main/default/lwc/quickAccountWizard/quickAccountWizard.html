@@ -12,16 +12,17 @@
                 <lightning-layout-item size="6" padding="horizontal-small">
                     <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                     <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-combobox 
+                    
+                    <!-- CHANGED: Now a standard Text Input -->
+                    <lightning-input 
                         label="Industry" 
                         data-id="accIndustry"
-                        placeholder="Select Industry..." 
-                        options={industryOptions} 
+                        placeholder="Enter Industry..." 
                         onchange={handleInputChange}
                         class="slds-m-bottom_small">
-                    </lightning-combobox>
+                    </lightning-input>
                     
-                    <!-- CHANGED: Removed type="number" so it accepts '$' -->
+                    <!-- Revenue Input (Text type to allow $ symbols) -->
                     <lightning-input 
                         label="Annual Revenue" 
                         data-id="accRevenue" 
