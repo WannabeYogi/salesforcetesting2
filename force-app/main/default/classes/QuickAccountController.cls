@@ -39,7 +39,7 @@ public with sharing class QuickAccountController {
                 Description = description,
                 TickerSymbol = ticker,
                 Ownership = ownership,
-                SicCode = sicCode,
+                Sic = sicCode != null ? sicCode : null,
                 YearStarted = yearStarted
             );
             
