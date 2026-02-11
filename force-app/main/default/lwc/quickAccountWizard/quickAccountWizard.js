@@ -36,7 +36,7 @@ export default class QuickAccountWizard extends LightningElement {
         marketCap: '',
         locations: null,
         fiscalYear: '',
-        currency: '',
+        accountCurrency: '',
         stockExchange: '',
         dunsNumber: '',
         naicsCode: '',
@@ -82,7 +82,7 @@ export default class QuickAccountWizard extends LightningElement {
             'accMarketCap': 'marketCap',
             'accLocations': 'locations',
             'accFiscalYear': 'fiscalYear',
-            'accCurrency': 'currency',
+            'accCurrency': 'accountCurrency',
             'accStockExchange': 'stockExchange',
             'accDunsNumber': 'dunsNumber',
             'accNaicsCode': 'naicsCode',
@@ -124,48 +124,7 @@ export default class QuickAccountWizard extends LightningElement {
             cleanRevenue = parseFloat(stringVal);
         }
 
-        createAccount({ 
-            name: this.formData.name,
-            accNumber: this.formData.accNumber,
-            phone: this.formData.phone,
-            website: this.formData.website,
-            industry: this.formData.industry,
-            revenue: cleanRevenue,
-            revenueRange: this.formData.revenueRange,
-            employees: this.formData.employees,
-            city: this.formData.city,
-            state: this.formData.state,
-            postalCode: this.formData.postalCode,
-            country: this.formData.country,
-            type: this.formData.type,
-            description: this.formData.description,
-            primaryContact: this.formData.primaryContact,
-            contactTitle: this.formData.contactTitle,
-            contactEmail: this.formData.contactEmail,
-            contactPhone: this.formData.contactPhone,
-            fax: this.formData.fax,
-            rating: this.formData.rating,
-            customerPriority: this.formData.customerPriority,
-            slaExpiration: this.formData.slaExpiration,
-            ticker: this.formData.ticker,
-            ownership: this.formData.ownership,
-            sicCode: this.formData.sicCode,
-            yearStarted: this.formData.yearStarted,
-            marketCap: this.formData.marketCap,
-            locations: this.formData.locations,
-            fiscalYear: this.formData.fiscalYear,
-            currency: this.formData.currency,
-            stockExchange: this.formData.stockExchange,
-            dunsNumber: this.formData.dunsNumber,
-            naicsCode: this.formData.naicsCode,
-            source: this.formData.source,
-            campaign: this.formData.campaign,
-            leadSource: this.formData.leadSource,
-            lastActivityDate: this.formData.lastActivityDate,
-            nextActivityDate: this.formData.nextActivityDate,
-            activityType: this.formData.activityType,
-            activityDescription: this.formData.activityDescription
-        })
+        createAccount({ data: this.formData })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
             this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
