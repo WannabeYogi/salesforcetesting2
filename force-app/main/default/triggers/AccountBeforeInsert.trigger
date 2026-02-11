@@ -1,3 +1,5 @@
 trigger AccountBeforeInsert on Account (before insert) {
-    DemoAccountTriggerHandler.beforeInsert(Trigger.new);
+    if (Trigger.isBefore && Trigger.isInsert) {
+        DemoAccountTriggerHandler.handleBeforeInsert(Trigger.new);
+    }
 }
