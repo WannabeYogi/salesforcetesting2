@@ -124,7 +124,44 @@ export default class QuickAccountWizard extends LightningElement {
             cleanRevenue = parseFloat(stringVal);
         }
 
-        createAccount({ data: this.formData })
+        createAccount({ 
+            name: this.formData.name,
+            accNumber: this.formData.accNumber,
+            phone: this.formData.phone,
+            website: this.formData.website,
+            industry: this.formData.industry,
+            revenue: cleanRevenue,
+            revenueRange: this.formData.revenueRange,
+            employees: this.formData.employees,
+            city: this.formData.city,
+            state: this.formData.state,
+            postalCode: this.formData.postalCode,
+            country: this.formData.country,
+            type: this.formData.type,
+            description: this.formData.description,
+            primaryContact: this.formData.primaryContact,
+            contactTitle: this.formData.contactTitle,
+            contactEmail: this.formData.contactEmail,
+            contactPhone: this.formData.contactPhone,
+            fax: this.formData.fax,
+            rating: this.formData.rating,
+            customerPriority: this.formData.customerPriority,
+            slaExpiration: this.formData.slaExpiration,
+            ticker: this.formData.ticker,
+            ownership: this.formData.ownership,
+            sicCode: this.formData.sicCode,
+            yearStarted: this.formData.yearStarted,
+            marketCap: this.formData.marketCap,
+            locations: this.formData.locations,
+            fiscalYear: this.formData.fiscalYear,
+            accountCurrency: this.formData.accountCurrency,
+            stockExchange: this.formData.stockExchange,
+            dunsNumber: this.formData.dunsNumber,
+            naicsCode: this.formData.naicsCode,
+            source: this.formData.source,
+            campaign: this.formData.campaign,
+            leadSource: this.formData.leadSource
+        })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
             this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {

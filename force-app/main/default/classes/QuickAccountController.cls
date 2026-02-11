@@ -1,6 +1,43 @@
 public with sharing class QuickAccountController {
     @AuraEnabled
-    public static Account createAccount(AccountDataWrapper data) {
+    public static Account createAccount(
+        String name, 
+        String accNumber, 
+        String phone, 
+        String website, 
+        String industry, 
+        Decimal revenue,
+        String revenueRange,
+        Integer employees, 
+        String city,
+        String state,
+        String postalCode,
+        String country,
+        String type,
+        String description,
+        String primaryContact,
+        String contactTitle,
+        String contactEmail,
+        String contactPhone,
+        String fax,
+        String rating,
+        String customerPriority,
+        String slaExpiration,
+        String ticker,
+        String ownership,
+        String sicCode,
+        String yearStarted,
+        String marketCap,
+        Integer locations,
+        String fiscalYear,
+        String accountCurrency,
+        String stockExchange,
+        String dunsNumber,
+        String naicsCode,
+        String source,
+        String campaign,
+        String leadSource
+    ) {
         try {
             // --- NEW BUSINESS LOGIC ---
             // Requirement: Enterprise accounts must have > $10M Revenue
@@ -21,94 +58,82 @@ public with sharing class QuickAccountController {
             // - Activity Tracking
             
             // Combine additional information into description
-            String fullDescription = data.description;
-            if (String.isNotBlank(data.primaryContact)) {
-                fullDescription += '\n\nPrimary Contact: ' + data.primaryContact;
-                if (String.isNotBlank(data.contactTitle)) {
-                    fullDescription += ' (' + data.contactTitle + ')';
+            String fullDescription = description;
+            if (String.isNotBlank(primaryContact)) {
+                fullDescription += '\n\nPrimary Contact: ' + primaryContact;
+                if (String.isNotBlank(contactTitle)) {
+                    fullDescription += ' (' + contactTitle + ')';
                 }
-                if (String.isNotBlank(data.contactEmail)) {
-                    fullDescription += '\nEmail: ' + data.contactEmail;
+                if (String.isNotBlank(contactEmail)) {
+                    fullDescription += '\nEmail: ' + contactEmail;
                 }
-                if (String.isNotBlank(data.contactPhone)) {
-                    fullDescription += '\nPhone: ' + data.contactPhone;
+                if (String.isNotBlank(contactPhone)) {
+                    fullDescription += '\nPhone: ' + contactPhone;
                 }
             }
-            if (String.isNotBlank(data.revenueRange)) {
-                fullDescription += '\n\nRevenue Range: ' + data.revenueRange;
+            if (String.isNotBlank(revenueRange)) {
+                fullDescription += '\n\nRevenue Range: ' + revenueRange;
             }
-            if (String.isNotBlank(data.marketCap)) {
-                fullDescription += '\nMarket Cap: ' + data.marketCap;
+            if (String.isNotBlank(marketCap)) {
+                fullDescription += '\nMarket Cap: ' + marketCap;
             }
-            if (data.locations != null) {
-                fullDescription += '\nNumber of Locations: ' + data.locations;
+            if (locations != null) {
+                fullDescription += '\nNumber of Locations: ' + locations;
             }
-            if (String.isNotBlank(data.fiscalYear)) {
-                fullDescription += '\nFiscal Year: ' + data.fiscalYear;
+            if (String.isNotBlank(fiscalYear)) {
+                fullDescription += '\nFiscal Year: ' + fiscalYear;
             }
-            if (String.isNotBlank(data.accountCurrency)) {
-                fullDescription += '\nCurrency: ' + data.accountCurrency;
+            if (String.isNotBlank(accountCurrency)) {
+                fullDescription += '\nCurrency: ' + accountCurrency;
             }
-            if (String.isNotBlank(data.stockExchange)) {
-                fullDescription += '\nStock Exchange: ' + data.stockExchange;
+            if (String.isNotBlank(stockExchange)) {
+                fullDescription += '\nStock Exchange: ' + stockExchange;
             }
-            if (String.isNotBlank(data.dunsNumber)) {
-                fullDescription += '\nDUNS Number: ' + data.dunsNumber;
+            if (String.isNotBlank(dunsNumber)) {
+                fullDescription += '\nDUNS Number: ' + dunsNumber;
             }
-            if (String.isNotBlank(data.naicsCode)) {
-                fullDescription += '\nNAICS Code: ' + data.naicsCode;
+            if (String.isNotBlank(naicsCode)) {
+                fullDescription += '\nNAICS Code: ' + naicsCode;
             }
-            if (String.isNotBlank(data.customerPriority)) {
-                fullDescription += '\nCustomer Priority: ' + data.customerPriority;
+            if (String.isNotBlank(customerPriority)) {
+                fullDescription += '\nCustomer Priority: ' + customerPriority;
             }
-            if (String.isNotBlank(data.slaExpiration)) {
-                fullDescription += '\nSLA Expiration: ' + data.slaExpiration;
+            if (String.isNotBlank(slaExpiration)) {
+                fullDescription += '\nSLA Expiration: ' + slaExpiration;
             }
-            if (String.isNotBlank(data.source)) {
-                fullDescription += '\nAccount Source: ' + data.source;
+            if (String.isNotBlank(source)) {
+                fullDescription += '\nAccount Source: ' + source;
             }
-            if (String.isNotBlank(data.campaign)) {
-                fullDescription += '\nCampaign: ' + data.campaign;
+            if (String.isNotBlank(campaign)) {
+                fullDescription += '\nCampaign: ' + campaign;
             }
-            if (String.isNotBlank(data.leadSource)) {
-                fullDescription += '\nLead Source: ' + data.leadSource;
-            }
-            if (String.isNotBlank(data.lastActivityDate)) {
-                fullDescription += '\nLast Activity: ' + data.lastActivityDate;
-            }
-            if (String.isNotBlank(data.nextActivityDate)) {
-                fullDescription += '\nNext Activity: ' + data.nextActivityDate;
-            }
-            if (String.isNotBlank(data.activityType)) {
-                fullDescription += '\nActivity Type: ' + data.activityType;
-            }
-            if (String.isNotBlank(data.activityDescription)) {
-                fullDescription += '\nActivity Description: ' + data.activityDescription;
+            if (String.isNotBlank(leadSource)) {
+                fullDescription += '\nLead Source: ' + leadSource;
             }
 
             Account newAcc = new Account(
-                Name = data.name,
-                AccountNumber = data.accNumber,
-                Phone = data.phone,
-                Website = data.website,
-                Industry = data.industry,
-                AnnualRevenue = data.revenue,
-                NumberOfEmployees = data.employees,
-                BillingCity = data.city,
-                BillingState = data.state,
-                BillingPostalCode = data.postalCode,
-                BillingCountry = data.country,
-                Type = data.type,
+                Name = name,
+                AccountNumber = accNumber,
+                Phone = phone,
+                Website = website,
+                Industry = industry,
+                AnnualRevenue = revenue,
+                NumberOfEmployees = employees,
+                BillingCity = city,
+                BillingState = state,
+                BillingPostalCode = postalCode,
+                BillingCountry = country,
+                Type = type,
                 Description = fullDescription,
-                Fax = data.fax,
-                Rating = data.rating,
+                Fax = fax,
+                Rating = rating,
                 // Commented out custom fields - create these in your org if needed
-                // CustomerPriority__c = data.customerPriority,
-                // SLAExpirationDate__c = data.slaExpiration != null ? Date.valueOf(data.slaExpiration) : null,
-                TickerSymbol = data.ticker,
-                Ownership = data.ownership,
-                Sic = data.sicCode != null ? data.sicCode : null,
-                YearStarted = data.yearStarted
+                // CustomerPriority__c = customerPriority,
+                // SLAExpirationDate__c = slaExpiration != null ? Date.valueOf(slaExpiration) : null,
+                TickerSymbol = ticker,
+                Ownership = ownership,
+                Sic = sicCode != null ? sicCode : null,
+                YearStarted = yearStarted
             );
             
             // Allow duplicates for demo purposes
