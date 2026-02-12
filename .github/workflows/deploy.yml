@@ -3,7 +3,7 @@ name: Deploy to Salesforce & Trigger Kamikaze
 # Trigger on push to main branch
 on:
   push:
-    branches: [ "main", "test2", "test4", "test6", "hello" ]
+    branches: [ "main", "test2", "test4", "test6", "test7" , "test8", "test9", "test10"  ]
     paths-ignore:
       - 'README.md'
       - '.github/**'
@@ -39,5 +39,3 @@ jobs:
       # This pushes your Apex/LWC changes to the Org
       - name: Deploy Source
         run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
-
-    
