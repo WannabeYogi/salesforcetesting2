@@ -113,7 +113,7 @@ export default class PcOrderWizard extends LightningElement {
         // Call Apex method
         createPCOrder({ orderData: JSON.stringify(orderData) })
             .then(result => {
-                this.message = `Success! Order placed: ${result.OrderNumber__c}`;
+                this.message = `Success! Order created: ${result.Name}`;
                 this.messageType = 'success';
                 this.dispatchEvent(
                     new ShowToastEvent({
