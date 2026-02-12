@@ -1,8 +1,9 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import createPCOrder from '@salesforce/apex/PCOrderController.createPCOrder';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class PcOrderWizard extends LightningElement {
+    @api title = 'PC Order Wizard';
     @track message = '';
     @track messageType = '';
 
