@@ -6,15 +6,62 @@ public with sharing class QuickAccountController {
         String phone, 
         String website, 
         String industry, 
-        Decimal revenue, 
+        Decimal revenue,
+        String revenueRange,
         Integer employees, 
-        String city
+        String city,
+        String state,
+        String postalCode,
+        String country,
+        String type,
+        String description,
+        String primaryContact,
+        String contactTitle,
+        String contactEmail,
+        String contactPhone,
+        String fax,
+        String rating,
+        String customerPriority,
+        String slaExpiration,
+        String ticker,
+        String ownership,
+        String sicCode,
+        String yearStarted
     ) {
         try {
             // --- NEW BUSINESS LOGIC ---
             // Requirement: Enterprise accounts must have > $10M Revenue
             
-            // -------------------------jgfvrffjhvvfjg-
+            // --- NOTE: Some fields are stored in description for demo purposes ---
+            // In a real implementation, you would create custom fields for:
+            // - Revenue Range
+            // - Primary Contact Information
+            // - Customer Priority
+            // - SLA Expiration Date
+            
+            // Combine additional information into description
+            String fullDescription = description;
+            if (String.isNotBlank(primaryContact)) {
+                fullDescription += '\n\nPrimary Contact: ' + primaryContact;
+                if (String.isNotBlank(contactTitle)) {
+                    fullDescription += ' (' + contactTitle + ')';
+                }
+                if (String.isNotBlank(contactEmail)) {
+                    fullDescription += '\nEmail: ' + contactEmail;
+                }
+                if (String.isNotBlank(contactPhone)) {
+                    fullDescription += '\nPhone: ' + contactPhone;
+                }
+            }
+            if (String.isNotBlank(revenueRange)) {
+                fullDescription += '\n\nRevenue Range: ' + revenueRange;
+            }
+            if (String.isNotBlank(customerPriority)) {
+                fullDescription += '\nCustomer Priority: ' + customerPriority;
+            }
+            if (String.isNotBlank(slaExpiration)) {
+                fullDescription += '\nSLA Expiration: ' + slaExpiration;
+            }
 
             Account newAcc = new Account(
                 Name = name,
@@ -24,7 +71,21 @@ public with sharing class QuickAccountController {
                 Industry = industry,
                 AnnualRevenue = revenue,
                 NumberOfEmployees = employees,
-                BillingCity = city
+                BillingCity = city,
+                BillingState = state,
+                BillingPostalCode = postalCode,
+                BillingCountry = country,
+                Type = type,
+                Description = fullDescription,
+                Fax = fax,
+                Rating = rating,
+                // Commented out custom fields - create these in your org if needed
+                // CustomerPriority__c = customerPriority,
+                // SLAExpirationDate__c = slaExpiration != null ? Date.valueOf(slaExpiration) : null,
+                TickerSymbol = ticker,
+                Ownership = ownership,
+                Sic = sicCode != null ? sicCode : null,
+                YearStarted = yearStarted
             );
             
             // Allow duplicates for demo purposes
