@@ -89,9 +89,9 @@ export default class PcOrderWizard extends LightningElement {
         const additionalRequirements = requirementsInput.value;
 
         // Validation
-        if (!companyName || !contactEmail) {
+        if (!companyName ) {
             if (!companyName) companyInput.reportValidity();
-            if (!contactEmail) emailInput.reportValidity();
+            
             return;
         }
 
