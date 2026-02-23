@@ -80,6 +80,8 @@ export default class QuickAccountWizard extends LightningElement {
         this.errorMessage = '';
 
         const nameInput = this.template.querySelector('[data-id="accName"]');
+        const websiteInput = this.template.querySelector('[data-id="accWebsite"]');
+        
         if (!this.formData.name) {
             nameInput.setCustomValidity("Account Name is required.");
             nameInput.reportValidity();
@@ -89,11 +91,21 @@ export default class QuickAccountWizard extends LightningElement {
             nameInput.reportValidity();
         }
 
-        // Clean Revenue Logic
+        // Business rule: If Annual Revenue > 5,000,000, Website is mandatory
         let cleanRevenue = 0;
         if (this.formData.revenue) {
             const stringVal = String(this.formData.revenue).replace(/[^0-9.]/g, '');
             cleanRevenue = parseFloat(stringVal);
+        }
+
+        if (cleanRevenue > 5000000 && !this.formData.website) {
+            this.errorMessage = 'Website is required for accounts with Annual Revenue greater than $5,000,000.';
+            websiteInput.setCustomValidity('Website is required for high-value accounts.');
+            websiteInput.reportValidity();
+            return;
+        } else {
+            websiteInput.setCustomValidity('');
+            websiteInput.reportValidity();
         }
 
         createAccount({ 
