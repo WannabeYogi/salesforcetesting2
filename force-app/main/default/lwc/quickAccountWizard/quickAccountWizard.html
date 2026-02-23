@@ -11,39 +11,62 @@
                 
                 <lightning-layout-item size="6" padding="horizontal-small">
                     <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handlePhoneChange} class="slds-m-bottom_small"></lightning-input>
                     
-                    <!-- CHANGED: Nokjw a vjvccj jfjsvvvtandamhjhrd Text Input -->
-                    <lightning-input 
-                        label="Industry" 
-                        data-id="accIndustry"
-                        placeholder="Enter Industry..." 
-                        onchange={handleInputChange}
+                    <!-- Industry Dropdown -->
+                    <lightning-combobox
+                        name="industry"
+                        label="Industry"
+                        placeholder="Select Industry..."
+                        options={industryOptions}
+                        onchange={handleIndustryChange}
                         class="slds-m-bottom_small">
-                    </lightning-input>
+                    </lightning-combobox>
                     
-                    <!-- Revenue Input (Text type to allow $ symbols) -->
+                    <!-- Revenue Input with formatting -->
                     <lightning-input 
                         label="Annual Revenue" 
                         data-id="accRevenue" 
-                        onchange={handleInputChange} 
+                        formatter="currency"
+                        onchange={handleRevenueChange}
+                        onblur={formatRevenue}
                         class="slds-m-bottom_small">
                     </lightning-input>
                     
-                    <!-- Annual Revenue Range -->
+                    <!-- Revenue Range Dropdown -->
+                    <lightning-combobox
+                        name="revenueRange"
+                        label="Revenue Range"
+                        placeholder="Select Revenue Range..."
+                        options={revenueRangeOptions}
+                        onchange={handleInputChange}
+                        data-id="accRevenueRange"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Type Dropdown -->
+                    <lightning-combobox
+                        name="accountType"
+                        label="Account Type"
+                        placeholder="Select Account Type..."
+                        options={accountTypeOptions}
+                        onchange={handleInputChange}
+                        data-id="accType"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Source -->
                     <lightning-input 
-                        label="Revenue Range" 
-                        data-id="accRevenueRange" 
-                        placeholder="e.g., $10M-$50M" 
+                        label="Account Source" 
+                        data-id="accSource" 
                         onchange={handleInputChange}
                         class="slds-m-bottom_small">
                     </lightning-input>
                     
-                    <!-- Company cType -->
+                    <!-- Ownership -->
                     <lightning-input 
-                        label="Company Type" 
-                        data-id="accType" 
-                        placeholder="e.g., Corporation, Partnership" 
+                        label="Ownership" 
+                        data-id="accOwnership" 
                         onchange={handleInputChange}
                         class="slds-m-bottom_small">
                     </lightning-input>

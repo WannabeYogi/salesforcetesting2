@@ -6,6 +6,41 @@ export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
 
+    // Dropdown options
+    industryOptions = [
+        { label: 'Technology', value: 'Technology' },
+        { label: 'Healthcare', value: 'Healthcare' },
+        { label: 'Finance', value: 'Finance' },
+        { label: 'Manufacturing', value: 'Manufacturing' },
+        { label: 'Retail', value: 'Retail' },
+        { label: 'Energy', value: 'Energy' },
+        { label: 'Real Estate', value: 'Real Estate' },
+        { label: 'Consulting', value: 'Consulting' },
+        { label: 'Education', value: 'Education' },
+        { label: 'Other', value: 'Other' }
+    ];
+
+    revenueRangeOptions = [
+        { label: '< $1M', value: '< $1M' },
+        { label: '$1M - $5M', value: '$1M - $5M' },
+        { label: '$5M - $10M', value: '$5M - $10M' },
+        { label: '$10M - $50M', value: '$10M - $50M' },
+        { label: '$50M - $100M', value: '$50M - $100M' },
+        { label: '$100M - $500M', value: '$100M - $500M' },
+        { label: '$500M - $1B', value: '$500M - $1B' },
+        { label: '> $1B', value: '> $1B' }
+    ];
+
+    accountTypeOptions = [
+        { label: 'Prospect', value: 'Prospect' },
+        { label: 'Customer - Direct', value: 'Customer - Direct' },
+        { label: 'Customer - Channel', value: 'Customer - Channel' },
+        { label: 'Partner', value: 'Partner' },
+        { label: 'Reseller', value: 'Reseller' },
+        { label: 'Investor', value: 'Investor' },
+        { label: 'Vendor', value: 'Vendor' }
+    ];
+
     formData = {
         name: '',
         accNumber: '',
@@ -20,6 +55,7 @@ export default class QuickAccountWizard extends LightningElement {
         postalCode: '',
         country: '',
         type: '',
+        source: '',
         description: '',
         primaryContact: '',
         contactTitle: '',
@@ -52,6 +88,7 @@ export default class QuickAccountWizard extends LightningElement {
             'accPostalCode': 'postalCode',
             'accCountry': 'country',
             'accType': 'type',
+            'accSource': 'source',
             'accDescription': 'description',
             'accPrimaryContact': 'primaryContact',
             'accContactTitle': 'contactTitle',
@@ -73,6 +110,56 @@ export default class QuickAccountWizard extends LightningElement {
         if (key) {
             this.formData[key] = event.target.value;
         }
+    }
+
+    // Enhanced handlers for new features
+    handleIndustryChange(event) {
+        this.formData.industry = event.detail.value;
+        
+        // Auto-populate account type based on industry
+        if (event.detail.value === 'Technology' || event.detail.value === 'Finance') {
+            this.formData.type = 'Prospect';
+            const typeCombo = this.template.querySelector('lightning-combobox[name="accountType"]');
+            if (typeCombo) {
+                typeCombo.value = 'Prospect';
+            }
+        }
+    }
+
+    handleRevenueChange(event) {
+        this.formData.revenue = event.target.value;
+    }
+
+    formatRevenue() {
+        const revenueInput = this.template.querySelector('[data-id="accRevenue"]');
+        if (revenueInput && revenueInput.value) {
+            const cleanValue = String(revenueInput.value).replace(/[^0-9.]/g, '');
+            const numberValue = parseFloat(cleanValue);
+            if (!isNaN(numberValue)) {
+                revenueInput.value = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(numberValue);
+            }
+        }
+    }
+
+    // Auto-format phone number
+    handlePhoneChange(event) {
+        let phone = event.target.value.replace(/\D/g, '');
+        if (phone.length > 0) {
+            if (phone.length <= 3) {
+                phone = `(${phone}`;
+            } else if (phone.length <= 6) {
+                phone = `(${phone.slice(0, 3)}) ${phone.slice(3)}`;
+            } else {
+                phone = `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6, 10)}`;
+            }
+        }
+        event.target.value = phone;
+        this.formData.phone = phone;
     }
 
     handleCreate() {
@@ -98,15 +185,15 @@ export default class QuickAccountWizard extends LightningElement {
             cleanRevenue = parseFloat(stringVal);
         }
 
-        if (cleanRevenue > 5000000 && !this.formData.website) {
-            this.errorMessage = 'Website is required for accounts with Annual Revenue greater than $5,000,000.';
-            websiteInput.setCustomValidity('Website is required for high-value accounts.');
-            websiteInput.reportValidity();
-            return;
-        } else {
-            websiteInput.setCustomValidity('');
-            websiteInput.reportValidity();
-        }
+        // if (cleanRevenue > 5000000 && !this.formData.website) {
+        //     this.errorMessage = 'Website is required for accounts with Annual Revenue greater than $5,000,000.';
+        //     websiteInput.setCustomValidity('Website is required for high-value accounts.');
+        //     websiteInput.reportValidity();
+        //     return;
+        // } else {
+        //     websiteInput.setCustomValidity('');
+        //     websiteInput.reportValidity();
+        // }
 
         createAccount({ 
             name: this.formData.name,
@@ -122,6 +209,7 @@ export default class QuickAccountWizard extends LightningElement {
             postalCode: this.formData.postalCode,
             country: this.formData.country,
             type: this.formData.type,
+            source: this.formData.source,
             description: this.formData.description,
             primaryContact: this.formData.primaryContact,
             contactTitle: this.formData.contactTitle,
