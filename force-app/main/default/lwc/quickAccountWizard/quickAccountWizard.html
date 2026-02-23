@@ -11,32 +11,77 @@
                 
                 <lightning-layout-item size="6" padding="horizontal-small">
                     <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handlePhoneChange} class="slds-m-bottom_small"></lightning-input>
                     
-                    <!-- CHANGED: Now a standard Text Input -->
+                    <!-- Industry VFfDropdown -->
+                    <lightning-combobox
+                        name="industry"
+                        label="Industry"
+                        placeholder="Select Industry..."
+                        options={industryOptions}
+                        onchange={handleIndustryChange}
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Revenue Input with formatting -->
                     <lightning-input 
-                        label="Industry" 
-                        data-id="accIndustry"
-                        placeholder="Enter Industry..." 
+                        label="Annual Revenue" 
+                        data-id="accRevenue" 
+                        formatter="currency"
+                        onchange={handleRevenueChange}
+                        onblur={formatRevenue}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    
+                    <!-- Revenue Range Dropdown -->
+                    <lightning-combobox
+                        name="revenueRange"
+                        label="Revenue Range"
+                        placeholder="Select Revenue Range..."
+                        options={revenueRangeOptions}
+                        onchange={handleInputChange}
+                        data-id="accRevenueRange"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Type Dropdown -->
+                    <lightning-combobox
+                        name="accountType"
+                        label="Account Type"
+                        placeholder="Select Account Type..."
+                        options={accountTypeOptions}
+                        onchange={handleInputChange}
+                        data-id="accType"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Source -->
+                    <lightning-input 
+                        label="Account Source" 
+                        data-id="accSource" 
                         onchange={handleInputChange}
                         class="slds-m-bottom_small">
                     </lightning-input>
                     
-                    <!-- Revenue Input (Text type to allow $ symbols) -->
+                    <!-- Ownership -->
                     <lightning-input 
-                        label="Annual Revenue" 
-                        data-id="accRevenue" 
-                        onchange={handleInputChange} 
+                        label="Ownership" 
+                        data-id="accOwnership" 
+                        onchange={handleInputChange}
                         class="slds-m-bottom_small">
                     </lightning-input>
 
                 </lightning-layout-item>
+                <!-- Testing Context check-->
 
                 <lightning-layout-item size="6" padding="horizontal-small">
                     <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                     <lightning-input label="Website" type="url" data-id="accWebsite" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                     <lightning-input label="Employees" type="number" data-id="accEmployees" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                     <lightning-input label="Billing City" data-id="accCity" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing State/Province" data-id="accState" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing Postal Code" data-id="accPostalCode" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing Country" data-id="accCountry" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                 </lightning-layout-item>
 
             </lightning-layout>
