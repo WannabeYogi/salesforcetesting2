@@ -81,11 +81,13 @@ export default class PcOrderWizard extends LightningElement {
         const companyInput = this.template.querySelector('[data-id="companyName"]');
         const departmentInput = this.template.querySelector('[data-id="department"]');
         const emailInput = this.template.querySelector('[data-id="contactEmail"]');
+        const phoneInput = this.template.querySelector('[data-id="phoneNumber"]');
         const requirementsInput = this.template.querySelector('[data-id="additionalRequirements"]');
         
         const companyName = companyInput.value;
         const department = departmentInput.value;
         const contactEmail = emailInput.value;
+        const phoneNumber = phoneInput.value;
         const additionalRequirements = requirementsInput.value;
 
         // Validation
@@ -106,6 +108,7 @@ export default class PcOrderWizard extends LightningElement {
             companyName,
             department,
             contactEmail,
+            phoneNumber,
             additionalRequirements,
             devices: this.deviceQuantities
         };
@@ -142,6 +145,7 @@ export default class PcOrderWizard extends LightningElement {
         this.template.querySelector('[data-id="companyName"]').value = '';
         this.template.querySelector('[data-id="department"]').value = '';
         this.template.querySelector('[data-id="contactEmail"]').value = '';
+        this.template.querySelector('[data-id="phoneNumber"]').value = '';
         this.template.querySelector('[data-id="additionalRequirements"]').value = '';
         
         // Reset selections
