@@ -6,6 +6,28 @@ export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
 
+    // Checkbox device options
+    macDeviceOptions = [
+        { label: 'MacBook Air', value: 'MacBook Air' },
+        { label: 'MacBook Pro', value: 'MacBook Pro' },
+        { label: 'iMac', value: 'iMac' },
+        { label: 'Mac Mini', value: 'Mac Mini' },
+        { label: 'Mac Studio', value: 'Mac Studio' },
+        { label: 'Mac Pro', value: 'Mac Pro' }
+    ];
+
+    windowsDeviceOptions = [
+        { label: 'Surface Pro', value: 'Surface Pro' },
+        { label: 'Surface Laptop', value: 'Surface Laptop' },
+        { label: 'Surface Studio', value: 'Surface Studio' },
+        { label: 'Dell XPS', value: 'Dell XPS' },
+        { label: 'HP EliteBook', value: 'HP EliteBook' },
+        { label: 'Lenovo ThinkPad', value: 'Lenovo ThinkPad' }
+    ];
+
+    @track selectedMacDevices = [];
+    @track selectedWindowsDevices = [];
+
     // Dropdown options
     industryOptions = [
         { label: 'Technology', value: 'Technology' },
@@ -68,7 +90,9 @@ export default class QuickAccountWizard extends LightningElement {
         ticker: '',
         ownership: '',
         sicCode: '',
-        yearStarted: ''
+        yearStarted: '',
+        macDevices: '',
+        windowsDevices: ''
     };
 
     // REMOVED: get industryOptions() {...} is no longer needed
@@ -162,6 +186,17 @@ export default class QuickAccountWizard extends LightningElement {
         this.formData.phone = phone;
     }
 
+    // Checkbox handlers for devices
+    handleMacDeviceChange(event) {
+        this.selectedMacDevices = event.detail.value;
+        this.formData.macDevices = this.selectedMacDevices.join('; ');
+    }
+
+    handleWindowsDeviceChange(event) {
+        this.selectedWindowsDevices = event.detail.value;
+        this.formData.windowsDevices = this.selectedWindowsDevices.join('; ');
+    }
+
     handleCreate() {
         this.successMessage = '';
         this.errorMessage = '';
@@ -222,13 +257,17 @@ export default class QuickAccountWizard extends LightningElement {
             ticker: this.formData.ticker,
             ownership: this.formData.ownership,
             sicCode: this.formData.sicCode,
-            yearStarted: this.formData.yearStarted
+            yearStarted: this.formData.yearStarted,
+            macDevices: this.formData.macDevices,
+            windowsDevices: this.formData.windowsDevices
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
-            this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
+            this.template.querySelectorAll('lightning-input, lightning-combobox, lightning-checkbox-group').forEach(input => {
                 input.value = null;
             });
+            this.selectedMacDevices = [];
+            this.selectedWindowsDevices = [];
             this.formData = {}; 
         })
         .catch(error => {

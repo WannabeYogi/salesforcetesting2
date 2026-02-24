@@ -71,6 +71,28 @@
                         class="slds-m-bottom_small">
                     </lightning-input>
 
+                    <!-- Checkboxes for Devices -->
+                    <div class="slds-m-vertical_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_x-small">Select Devices</h3>
+                        <p class="slds-text-title_bold slds-m-bottom_x-small">Mac Devices</p>
+                        <lightning-checkbox-group
+                            name="macDevices"
+                            options={macDeviceOptions}
+                            value={selectedMacDevices}
+                            onchange={handleMacDeviceChange}
+                            class="slds-m-bottom_small">
+                        </lightning-checkbox-group>
+
+                        <p class="slds-text-title_bold slds-m-bottom_x-small">Windows Devices</p>
+                        <lightning-checkbox-group
+                            name="windowsDevices"
+                            options={windowsDeviceOptions}
+                            value={selectedWindowsDevices}
+                            onchange={handleWindowsDeviceChange}
+                            class="slds-m-bottom_small">
+                        </lightning-checkbox-group>
+                    </div>
+
                 </lightning-layout-item>
                 <!-- Testing Context check-->
 
