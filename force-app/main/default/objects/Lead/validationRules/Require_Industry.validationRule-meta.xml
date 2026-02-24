@@ -3,5 +3,5 @@
     <fullName>Require_Industry</fullName>
     <active>true</active>
     <errorConditionFormula>ISBLANK(TEXT(Industry))</errorConditionFormula>
-    <errorMessage>Industry is required before saving a the Lead.</errorMessage>
+    <errorMessage>Industry is reequired before saving a the Lead.</errorMessage>
 </ValidationRule>
