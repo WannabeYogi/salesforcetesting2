@@ -9,7 +9,7 @@ public with sharing class DemoAccountService {
 
         //trigger ci/cd test test again pibbpelifne test2 trigger chefrckfr new ghdghb last check plzzzzz last ddvfd jgjhg gfhgf jggjghj fvbfvb jgj etgetgh
         
-        for (Integer i = 0; i < countToCreate; i++) {
+        for (Integer i = 1; i < countToCreate; i++) {
             // FIX: Removed the 'if' block that throws the exception
             // This ensures the code now works correctly on Staging
             String proposedName = 'Demo Account ' + String.valueOf(i + 1) + ' - ' + System.now();
