@@ -3,8 +3,8 @@
     <actionOnInsert>Allow</actionOnInsert>
     <actionOnUpdate>Allow</actionOnUpdate>
     <alertText>JATAKA TEST: You are creating a duplicate record!</alertText>
-    <description>Duplicate Rule  for  Leads    v Verified for SCRUM-42   .</description>
-    <duplicateRuleFilter xsi:nil="true"/>
+    <description>Duplicate Rule  for  Leads Verified for SCRUM-42   .</description>
+    <duplicateRuleFilter xsi:nil="true"/>  
     <duplicateRuleMatchRules>
         <matchRuleSObjectType>Lead</matchRuleSObjectType>
         <matchingRule>Standard_Lead_Match_Rule_v1_0</matchingRule>
