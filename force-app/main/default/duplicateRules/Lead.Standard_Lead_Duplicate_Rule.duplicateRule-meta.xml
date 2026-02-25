@@ -3,7 +3,7 @@
     <actionOnInsert>Allow</actionOnInsert>
     <actionOnUpdate>Allow</actionOnUpdate>
     <alertText>JATAKA TEST: You are creating a duplicate record!</alertText>
-    <description>Identify leads that duplicate other leads and contacts</description>
+    <description>Duplicate Rule for Leads. Verified for SCRUM-27.</description>
     <duplicateRuleFilter xsi:nil="true"/>
     <duplicateRuleMatchRules>
         <matchRuleSObjectType>Lead</matchRuleSObjectType>
