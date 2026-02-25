@@ -29,7 +29,7 @@ public with sharing class QuickAccountController {
         String yearStarted
     ) {
         try {
-            //testing the SCRUM-45
+            //testing the  SCRUM-45
             // --- NEW BUSINESS LOGIC ---
             // Requirement: Enterprise accounts must have > $10M Revenue
             
