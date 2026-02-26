@@ -3,7 +3,7 @@ name: Deploy to Salesforce & Trigger Kamikaze
 # Trigger on push to main branch
 on:
   push:
-    branches: [ "main", "test2", "test4", "test6", "hello", "feature/SCRUM-14-test-context", "feature/SCRUM-16-verify-website-validation", "draftcheck", "yoyo", "feature/SCRUM-26-duplicate-tests", "feature/SCRUM-27-lead-conversion", "feature/SCRUM-42", "feature/SCRUM-44" ]
+    branches: [ "main", "test2", "test4", "test6", "hello", "feature/SCRUM-14-test-context", "feature/SCRUM-16-verify-website-validation", "draftcheck", "yoyo", "feature/SCRUM-26-duplicate-tests", "feature/SCRUM-27-lead-conversion", "feature/SCRUM-42", "feature/SCRUM-44", "feature/SCRUM-45" ]
     paths-ignore:
       - 'README.md'
       - '.github/**'
