@@ -1,3 +1,3 @@
 # salesforcetesting2
 
-Demo Salesforce project with simple Apex classes, trigger, and  metadata file. 
+Demo Salesforce project with  simple Apex classes, trigger, and  metadata file. 
