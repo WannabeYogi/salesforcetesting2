@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+
 import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
 
 export default class QuickAccountWizard extends LightningElement {
@@ -12,8 +13,26 @@ export default class QuickAccountWizard extends LightningElement {
         website: '',
         industry: '',
         revenue: '', 
+        revenueRange: '',
         employees: null,
-        city: ''
+        city: '',
+        state: '',
+        postalCode: '',
+        country: '',
+        type: '',
+        description: '',
+        primaryContact: '',
+        contactTitle: '',
+        contactEmail: '',
+        contactPhone: '',
+        fax: '',
+        rating: '',
+        customerPriority: '',
+        slaExpiration: '',
+        ticker: '',
+        ownership: '',
+        sicCode: '',
+        yearStarted: ''
     };
 
     // REMOVED: get industryOptions() {...} is no longer needed
@@ -26,8 +45,26 @@ export default class QuickAccountWizard extends LightningElement {
             'accWebsite': 'website',
             'accIndustry': 'industry',
             'accRevenue': 'revenue',
+            'accRevenueRange': 'revenueRange',
             'accEmployees': 'employees',
-            'accCity': 'city'
+            'accCity': 'city',
+            'accState': 'state',
+            'accPostalCode': 'postalCode',
+            'accCountry': 'country',
+            'accType': 'type',
+            'accDescription': 'description',
+            'accPrimaryContact': 'primaryContact',
+            'accContactTitle': 'contactTitle',
+            'accContactEmail': 'contactEmail',
+            'accContactPhone': 'contactPhone',
+            'accFax': 'fax',
+            'accRating': 'rating',
+            'accCustomerPriority': 'customerPriority',
+            'accSlaExpiration': 'slaExpiration',
+            'accTicker': 'ticker',
+            'accOwnership': 'ownership',
+            'accSicCode': 'sicCode',
+            'accYearStarted': 'yearStarted'
         };
 
         const fieldId = event.target.dataset.id;
@@ -66,8 +103,26 @@ export default class QuickAccountWizard extends LightningElement {
             website: this.formData.website,
             industry: this.formData.industry,
             revenue: cleanRevenue,
+            revenueRange: this.formData.revenueRange,
             employees: this.formData.employees,
-            city: this.formData.city
+            city: this.formData.city,
+            state: this.formData.state,
+            postalCode: this.formData.postalCode,
+            country: this.formData.country,
+            type: this.formData.type,
+            description: this.formData.description,
+            primaryContact: this.formData.primaryContact,
+            contactTitle: this.formData.contactTitle,
+            contactEmail: this.formData.contactEmail,
+            contactPhone: this.formData.contactPhone,
+            fax: this.formData.fax,
+            rating: this.formData.rating,
+            customerPriority: this.formData.customerPriority,
+            slaExpiration: this.formData.slaExpiration,
+            ticker: this.formData.ticker,
+            ownership: this.formData.ownership,
+            sicCode: this.formData.sicCode,
+            yearStarted: this.formData.yearStarted
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
