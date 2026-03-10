@@ -1,4 +1,4 @@
 # salesforcetesting2
 
-adding product to                                                                    opportunity and filling quantity and price .
+Demo    Salesforce project with simple Apex classes, trigger, and  metadata   file.
  
