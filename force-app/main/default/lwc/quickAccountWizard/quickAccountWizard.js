@@ -5,6 +5,7 @@ import createAccount from '@salesforce/apex/QuickAccountController.createAccount
 export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
+    @track isVipAccount = false;
 
     // Checkbox device options
     macDeviceOptions = [
@@ -195,6 +196,14 @@ export default class QuickAccountWizard extends LightningElement {
     handleWindowsDeviceChange(event) {
         this.selectedWindowsDevices = event.detail.value;
         this.formData.windowsDevices = this.selectedWindowsDevices.join('; ');
+    }
+
+    handleVipChange(event) {
+        this.isVipAccount = event.target.checked;
+        if (this.isVipAccount) {
+            this.formData.customerPriority = 'High';
+            this.formData.rating = 'Hot';
+        }
     }
 
     handleCreate() {
