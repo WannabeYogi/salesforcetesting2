@@ -1,3 +1,3 @@
 # salesforcetesting2
 
-Demo Salesforce project  with simple Apex classes,  trigger, and  metadata file. 
+test all     3 pages and make the account 

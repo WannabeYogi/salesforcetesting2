@@ -1,12 +1,15 @@
 import { LightningElement, track } from 'lwc';
-
 import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
 
 export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
+    @track currentStep = '1';
+    @track showSuccessState = false;
+    @track selectedMacDevices = [];
+    @track selectedWindowsDevices = [];
+    @track formData = this.getInitialFormData();
 
-    // Checkbox device options
     macDeviceOptions = [
         { label: 'MacBook Air', value: 'MacBook Air' },
         { label: 'MacBook Pro', value: 'MacBook Pro' },
@@ -25,10 +28,6 @@ export default class QuickAccountWizard extends LightningElement {
         { label: 'Lenovo ThinkPad', value: 'Lenovo ThinkPad' }
     ];
 
-    @track selectedMacDevices = [];
-    @track selectedWindowsDevices = [];
-
-    // Dropdown options
     industryOptions = [
         { label: 'Technology', value: 'Technology' },
         { label: 'Healthcare', value: 'Healthcare' },
@@ -63,116 +62,139 @@ export default class QuickAccountWizard extends LightningElement {
         { label: 'Vendor', value: 'Vendor' }
     ];
 
-    formData = {
-        name: '',
-        accNumber: '',
-        phone: '',
-        website: '',
-        industry: '',
-        revenue: '', 
-        revenueRange: '',
-        employees: null,
-        city: '',
-        state: '',
-        postalCode: '',
-        country: '',
-        type: '',
-        source: '',
-        description: '',
-        primaryContact: '',
-        contactTitle: '',
-        contactEmail: '',
-        contactPhone: '',
-        fax: '',
-        rating: '',
-        customerPriority: '',
-        slaExpiration: '',
-        ticker: '',
-        ownership: '',
-        sicCode: '',
-        yearStarted: '',
-        macDevices: '',
-        windowsDevices: ''
-    };
+    getInitialFormData() {
+        return {
+            name: '',
+            accNumber: '',
+            phone: '',
+            website: '',
+            industry: '',
+            revenue: '',
+            revenueRange: '',
+            employees: '',
+            city: '',
+            state: '',
+            postalCode: '',
+            country: '',
+            type: '',
+            ownership: ''
+        };
+    }
 
-    // REMOVED: get industryOptions() {...} is no longer needed
+    get isStepOne() {
+        return this.currentStep === '1';
+    }
+
+    get isStepTwo() {
+        return this.currentStep === '2';
+    }
+
+    get isStepThree() {
+        return this.currentStep === '3';
+    }
+
+    get isFirstStep() {
+        return this.currentStep === '1';
+    }
+
+    get isLastStep() {
+        return this.currentStep === '3';
+    }
+
+    get primaryButtonLabel() {
+        return this.isLastStep ? 'Create Account' : 'Next';
+    }
+
+    get stepHeading() {
+        if (this.isStepOne) {
+            return 'Page 1: Basic Account Information';
+        }
+
+        if (this.isStepTwo) {
+            return 'Page 2: Business and Billing Details';
+        }
+
+        return 'Page 3: Device Preferences and Review';
+    }
+
+    get stepDescription() {
+        if (this.isStepOne) {
+            return 'Start with the core account information.';
+        }
+
+        if (this.isStepTwo) {
+            return 'Add business details and billing address information.';
+        }
+
+        return 'Review the data, choose devices, and submit the account.';
+    }
+
+    get macDevicesSummary() {
+        return this.formData.macDevices || 'No Mac devices selected';
+    }
+
+    get windowsDevicesSummary() {
+        return this.formData.windowsDevices || 'No Windows devices selected';
+    }
 
     handleInputChange(event) {
-        const fieldMap = {
-            'accName': 'name',
-            'accNumber': 'accNumber',
-            'accPhone': 'phone',
-            'accWebsite': 'website',
-            'accIndustry': 'industry',
-            'accRevenue': 'revenue',
-            'accRevenueRange': 'revenueRange',
-            'accEmployees': 'employees',
-            'accCity': 'city',
-            'accState': 'state',
-            'accPostalCode': 'postalCode',
-            'accCountry': 'country',
-            'accType': 'type',
-            'accSource': 'source',
-            'accDescription': 'description',
-            'accPrimaryContact': 'primaryContact',
-            'accContactTitle': 'contactTitle',
-            'accContactEmail': 'contactEmail',
-            'accContactPhone': 'contactPhone',
-            'accFax': 'fax',
-            'accRating': 'rating',
-            'accCustomerPriority': 'customerPriority',
-            'accSlaExpiration': 'slaExpiration',
-            'accTicker': 'ticker',
-            'accOwnership': 'ownership',
-            'accSicCode': 'sicCode',
-            'accYearStarted': 'yearStarted'
-        };
-
-        const fieldId = event.target.dataset.id;
-        const key = fieldMap[fieldId];
-        
-        if (key) {
-            this.formData[key] = event.target.value;
+        const fieldName = event.target.dataset.field;
+        if (fieldName) {
+            this.formData = {
+                ...this.formData,
+                [fieldName]: event.target.value
+            };
         }
     }
 
-    // Enhanced handlers for new features
     handleIndustryChange(event) {
-        this.formData.industry = event.detail.value;
-        
-        // Auto-populate account type based on industry
+        const updatedFormData = {
+            ...this.formData,
+            industry: event.detail.value
+        };
+
         if (event.detail.value === 'Technology' || event.detail.value === 'Finance') {
-            this.formData.type = 'Prospect';
-            const typeCombo = this.template.querySelector('lightning-combobox[name="accountType"]');
-            if (typeCombo) {
-                typeCombo.value = 'Prospect';
-            }
+            updatedFormData.type = 'Prospect';
         }
+
+        this.formData = updatedFormData;
     }
 
     handleRevenueChange(event) {
-        this.formData.revenue = event.target.value;
+        this.formData = {
+            ...this.formData,
+            revenue: event.target.value
+        };
     }
 
     formatRevenue() {
-        const revenueInput = this.template.querySelector('[data-id="accRevenue"]');
-        if (revenueInput && revenueInput.value) {
-            const cleanValue = String(revenueInput.value).replace(/[^0-9.]/g, '');
-            const numberValue = parseFloat(cleanValue);
-            if (!isNaN(numberValue)) {
-                revenueInput.value = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }).format(numberValue);
-            }
+        const revenueInput = this.template.querySelector('[data-field="revenue"]');
+        if (!revenueInput || !revenueInput.value) {
+            return;
+        }
+
+        const cleanValue = String(revenueInput.value).replace(/[^0-9.]/g, '');
+        const numberValue = parseFloat(cleanValue);
+
+        if (!isNaN(numberValue)) {
+            const formattedValue = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(numberValue);
+
+            revenueInput.value = formattedValue;
+            this.formData = {
+                ...this.formData,
+                revenue: formattedValue
+            };
         }
     }
 
-    // Auto-format phone number
     handlePhoneChange(event) {
         let phone = event.target.value.replace(/\D/g, '');
+
         if (phone.length > 0) {
             if (phone.length <= 3) {
                 phone = `(${phone}`;
@@ -182,55 +204,66 @@ export default class QuickAccountWizard extends LightningElement {
                 phone = `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6, 10)}`;
             }
         }
+
         event.target.value = phone;
-        this.formData.phone = phone;
+        this.formData = {
+            ...this.formData,
+            phone
+        };
     }
 
-    // Checkbox handlers for devices
     handleMacDeviceChange(event) {
         this.selectedMacDevices = event.detail.value;
-        this.formData.macDevices = this.selectedMacDevices.join('; ');
+        this.formData = {
+            ...this.formData,
+            macDevices: this.selectedMacDevices.join('; ')
+        };
     }
 
     handleWindowsDeviceChange(event) {
         this.selectedWindowsDevices = event.detail.value;
-        this.formData.windowsDevices = this.selectedWindowsDevices.join('; ');
+        this.formData = {
+            ...this.formData,
+            windowsDevices: this.selectedWindowsDevices.join('; ')
+        };
+    }
+
+    handlePrevious() {
+        this.errorMessage = '';
+        const previousStep = Math.max(1, Number(this.currentStep) - 1);
+        this.currentStep = String(previousStep);
+    }
+
+    handlePrimaryAction() {
+        this.errorMessage = '';
+
+        if (!this.validateCurrentStep()) {
+            return;
+        }
+
+        if (this.isLastStep) {
+            this.handleCreate();
+            return;
+        }
+
+        this.currentStep = String(Number(this.currentStep) + 1);
+    }
+
+    validateCurrentStep() {
+        const fields = this.template.querySelectorAll('lightning-input, lightning-combobox');
+        return [...fields].reduce((isValid, field) => {
+            field.reportValidity();
+            return isValid && field.checkValidity();
+        }, true);
     }
 
     handleCreate() {
         this.successMessage = '';
         this.errorMessage = '';
 
-        const nameInput = this.template.querySelector('[data-id="accName"]');
-        const websiteInput = this.template.querySelector('[data-id="accWebsite"]');
-        
-        if (!this.formData.name) {
-            nameInput.setCustomValidity("Account Name is required.");
-            nameInput.reportValidity();
-            return;
-        } else {
-            nameInput.setCustomValidity("");
-            nameInput.reportValidity();
-        }
+        const cleanRevenue = this.parseRevenueValue(this.formData.revenue);
 
-        // Business rule: If Annual Revenue > 5,000,000, Website is mandatory
-        let cleanRevenue = 0;
-        if (this.formData.revenue) {
-            const stringVal = String(this.formData.revenue).replace(/[^0-9.]/g, '');
-            cleanRevenue = parseFloat(stringVal);
-        }
-
-        // if (cleanRevenue > 5000000 && !this.formData.website) {
-        //     this.errorMessage = 'Website is required for accounts with Annual Revenue greater than $5,000,000.';
-        //     websiteInput.setCustomValidity('Website is required for high-value accounts.');
-        //     websiteInput.reportValidity();
-        //     return;
-        // } else {
-        //     websiteInput.setCustomValidity('');
-        //     websiteInput.reportValidity();
-        // }
-
-        createAccount({ 
+        createAccount({
             name: this.formData.name,
             accNumber: this.formData.accNumber,
             phone: this.formData.phone,
@@ -238,40 +271,40 @@ export default class QuickAccountWizard extends LightningElement {
             industry: this.formData.industry,
             revenue: cleanRevenue,
             revenueRange: this.formData.revenueRange,
-            employees: this.formData.employees,
+            employees: this.formData.employees ? Number(this.formData.employees) : null,
             city: this.formData.city,
             state: this.formData.state,
             postalCode: this.formData.postalCode,
             country: this.formData.country,
             type: this.formData.type,
-            source: this.formData.source,
-            description: this.formData.description,
-            primaryContact: this.formData.primaryContact,
-            contactTitle: this.formData.contactTitle,
-            contactEmail: this.formData.contactEmail,
-            contactPhone: this.formData.contactPhone,
-            fax: this.formData.fax,
-            rating: this.formData.rating,
-            customerPriority: this.formData.customerPriority,
-            slaExpiration: this.formData.slaExpiration,
-            ticker: this.formData.ticker,
-            ownership: this.formData.ownership,
-            sicCode: this.formData.sicCode,
-            yearStarted: this.formData.yearStarted,
-            macDevices: this.formData.macDevices,
-            windowsDevices: this.formData.windowsDevices
+            ownership: this.formData.ownership
         })
-        .then(result => {
-            this.successMessage = `Account "${result.Name}" created successfully!`;
-            this.template.querySelectorAll('lightning-input, lightning-combobox, lightning-checkbox-group').forEach(input => {
-                input.value = null;
+            .then((result) => {
+                this.successMessage = `Account "${result.Name}" was created successfully after completing all 3 pages.`;
+                this.showSuccessState = true;
+            })
+            .catch((error) => {
+                this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
             });
-            this.selectedMacDevices = [];
-            this.selectedWindowsDevices = [];
-            this.formData = {}; 
-        })
-        .catch(error => {
-            this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
-        });
+    }
+
+    handleStartOver() {
+        this.successMessage = '';
+        this.errorMessage = '';
+        this.showSuccessState = false;
+        this.currentStep = '1';
+        this.selectedMacDevices = [];
+        this.selectedWindowsDevices = [];
+        this.formData = this.getInitialFormData();
+    }
+
+    parseRevenueValue(value) {
+        if (!value) {
+            return 0;
+        }
+
+        const cleanValue = String(value).replace(/[^0-9.]/g, '');
+        const parsedValue = parseFloat(cleanValue);
+        return isNaN(parsedValue) ? 0 : parsedValue;
     }
 }

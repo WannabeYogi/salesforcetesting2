@@ -1,136 +1,213 @@
 <template>
-    <lightning-card title="New Enterprise Account" icon-name="standard:account">
+    <lightning-card title="3-Page Account Wizard" icon-name="standard:account">
         <div class="slds-p-around_medium">
-            
-            <div class="slds-border_bottom slds-m-bottom_medium">
-                <h2 class="slds-text-heading_medium">Account Details</h2>
-                <p class="slds-text-color_weak slds-m-bottom_small">Enter the corporate details below.</p>
-            </div>
+            <template if:true={showSuccessState}>
+                <div class="slds-box slds-theme_success">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_small">Success</h2>
+                    <p class="slds-m-bottom_medium">{successMessage}</p>
+                    <lightning-button label="Create Another Account" onclick={handleStartOver}></lightning-button>
+                </div>
+            </template>
 
-            <lightning-layout multiple-rows="true">
-                
-                <lightning-layout-item size="6" padding="horizontal-small">
-                    <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handlePhoneChange} class="slds-m-bottom_small"></lightning-input>
-                    
-                    <!-- Industry VFfDropdown -->
-                    <lightning-combobox
-                        name="industry"
-                        label="Industry"
-                        placeholder="Select Industry..."
-                        options={industryOptions}
-                        onchange={handleIndustryChange}
-                        class="slds-m-bottom_small">
-                    </lightning-combobox>
-                    
-                    <!-- Refjvenue Input witcjkh formatting -->
-                    <lightning-input 
-                        label="Annual Revenue" 
-                        data-id="accRevenue" 
-                        formatter="currency"
-                        onchange={handleRevenueChange}
-                        onblur={formatRevenue}
-                        class="slds-m-bottom_small">
-                    </lightning-input>
-                    
-                    <!-- Revenue Range Dropdown -->
-                    <lightning-combobox
-                        name="revenueRange"
-                        label="Revenue Range"
-                        placeholder="Select Revenue Range..."
-                        options={revenueRangeOptions}
-                        onchange={handleInputChange}
-                        data-id="accRevenueRange"
-                        class="slds-m-bottom_small">
-                    </lightning-combobox>
-                    
-                    <!-- Account Tymjpe Dropdown -->
-                    <lightning-combobox
-                        name="accountType"
-                        label="Account Type"
-                        placeholder="Select Account Type..."
-                        options={accountTypeOptions}
-                        onchange={handleInputChange}
-                        data-id="accType"
-                        class="slds-m-bottom_small">
-                    </lightning-combobox>
-                    
-                    <!-- Account Source -->
-                    <lightning-input 
-                        label="Account Source" 
-                        data-id="accSource" 
-                        onchange={handleInputChange}
-                        class="slds-m-bottom_small">
-                    </lightning-input>
-                    
-                    <!-- Ownership -->
-                    <lightning-input 
-                        label="Ownership" 
-                        data-id="accOwnership" 
-                        onchange={handleInputChange}
-                        class="slds-m-bottom_small">
-                    </lightning-input>
+            <template if:false={showSuccessState}>
+                <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                    <lightning-progress-step label="Page 1" value="1"></lightning-progress-step>
+                    <lightning-progress-step label="Page 2" value="2"></lightning-progress-step>
+                    <lightning-progress-step label="Page 3" value="3"></lightning-progress-step>
+                </lightning-progress-indicator>
 
-                    <!-- Checkboxes for Devices -->
-                    <div class="slds-m-vertical_medium">
-                        <h3 class="slds-text-heading_small slds-m-bottom_x-small">Select Devices</h3>
-                        <p class="slds-text-title_bold slds-m-bottom_x-small">Mac Devices</p>
-                        <lightning-checkbox-group
-                            name="macDevices"
-                            options={macDeviceOptions}
-                            value={selectedMacDevices}
-                            onchange={handleMacDeviceChange}
-                            class="slds-m-bottom_small">
-                        </lightning-checkbox-group>
+                <div class="slds-m-top_large slds-m-bottom_medium">
+                    <h2 class="slds-text-heading_medium">{stepHeading}</h2>
+                    <p class="slds-text-color_weak">{stepDescription}</p>
+                </div>
 
-                        <p class="slds-text-title_bold slds-m-bottom_x-small">Windows Devices</p>
-                        <lightning-checkbox-group
-                            name="windowsDevices"
-                            options={windowsDeviceOptions}
-                            value={selectedWindowsDevices}
-                            onchange={handleWindowsDeviceChange}
-                            class="slds-m-bottom_small">
-                        </lightning-checkbox-group>
+                <template if:true={isStepOne}>
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="6" padding="horizontal-small">
+                            <lightning-input
+                                label="Account Name"
+                                data-field="name"
+                                value={formData.name}
+                                required
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Phone"
+                                type="tel"
+                                data-field="phone"
+                                value={formData.phone}
+                                onchange={handlePhoneChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-combobox
+                                name="industry"
+                                label="Industry"
+                                placeholder="Select Industry"
+                                options={industryOptions}
+                                value={formData.industry}
+                                onchange={handleIndustryChange}
+                                class="slds-m-bottom_small">
+                            </lightning-combobox>
+                            <lightning-input
+                                label="Annual Revenue"
+                                data-field="revenue"
+                                value={formData.revenue}
+                                onchange={handleRevenueChange}
+                                onblur={formatRevenue}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6" padding="horizontal-small">
+                            <lightning-input
+                                label="Account Number"
+                                data-field="accNumber"
+                                value={formData.accNumber}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Website"
+                                type="url"
+                                data-field="website"
+                                value={formData.website}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-combobox
+                                name="revenueRange"
+                                label="Revenue Range"
+                                placeholder="Select Revenue Range"
+                                options={revenueRangeOptions}
+                                data-field="revenueRange"
+                                value={formData.revenueRange}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-combobox>
+                            <lightning-combobox
+                                name="accountType"
+                                label="Account Type"
+                                placeholder="Select Account Type"
+                                options={accountTypeOptions}
+                                data-field="type"
+                                value={formData.type}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+
+                <template if:true={isStepTwo}>
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="6" padding="horizontal-small">
+                            <lightning-input
+                                label="Employees"
+                                type="number"
+                                data-field="employees"
+                                value={formData.employees}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Ownership"
+                                data-field="ownership"
+                                value={formData.ownership}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Billing City"
+                                data-field="city"
+                                value={formData.city}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Billing State/Province"
+                                data-field="state"
+                                value={formData.state}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6" padding="horizontal-small">
+                            <lightning-input
+                                label="Billing Postal Code"
+                                data-field="postalCode"
+                                value={formData.postalCode}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                            <lightning-input
+                                label="Billing Country"
+                                data-field="country"
+                                value={formData.country}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_small">
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+
+                <template if:true={isStepThree}>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-horizontal_small">
+                            <h3 class="slds-text-title_bold slds-m-bottom_small">Mac Devices</h3>
+                            <lightning-checkbox-group
+                                name="macDevices"
+                                options={macDeviceOptions}
+                                value={selectedMacDevices}
+                                onchange={handleMacDeviceChange}
+                                class="slds-m-bottom_medium">
+                            </lightning-checkbox-group>
+
+                            <h3 class="slds-text-title_bold slds-m-bottom_small">Windows Devices</h3>
+                            <lightning-checkbox-group
+                                name="windowsDevices"
+                                options={windowsDeviceOptions}
+                                value={selectedWindowsDevices}
+                                onchange={handleWindowsDeviceChange}>
+                            </lightning-checkbox-group>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-horizontal_small">
+                            <div class="slds-box slds-theme_default">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Review</h3>
+                                <p><strong>Account Name:</strong> {formData.name}</p>
+                                <p><strong>Industry:</strong> {formData.industry}</p>
+                                <p><strong>Revenue:</strong> {formData.revenue}</p>
+                                <p><strong>Phone:</strong> {formData.phone}</p>
+                                <p><strong>Website:</strong> {formData.website}</p>
+                                <p><strong>Employees:</strong> {formData.employees}</p>
+                                <p><strong>Billing City:</strong> {formData.city}</p>
+                                <p><strong>Billing Country:</strong> {formData.country}</p>
+                                <p><strong>Mac Devices:</strong> {macDevicesSummary}</p>
+                                <p><strong>Windows Devices:</strong> {windowsDevicesSummary}</p>
+                            </div>
+                        </div>
                     </div>
+                </template>
 
-                </lightning-layout-item>
-                <!-- Testing Context check-->
+                <template if:true={errorMessage}>
+                    <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium" role="alert">
+                        <h2>{errorMessage}</h2>
+                    </div>
+                </template>
 
-                <lightning-layout-item size="6" padding="horizontal-small">
-                    <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Website" type="url" data-id="accWebsite" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Employees" type="number" data-id="accEmployees" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Billing City" data-id="accCity" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Billing State/Province" data-id="accState" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Billing Postal Code" data-id="accPostalCode" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    <lightning-input label="Billing Country" data-id="accCountry" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                </lightning-layout-item>
-
-            </lightning-layout>
-
-            <div class="slds-align_absolute-center slds-m-top_large">
-                <lightning-button 
-                    variant="brand" 
-                    label="Save Account" 
-                    title="Save Account" 
-                    onclick={handleCreate}
-                    class="create-btn">
-                </lightning-button>
-            </div>
-
-            <template if:true={successMessage}>
-                <div class="slds-notify slds-notify_alert slds-alert_success slds-m-top_medium" role="alert">
-                    <span class="slds-assistive-text">success</span>
-                    <h2>{successMessage}</h2>
+                <div class="slds-grid slds-grid_align-spread slds-m-top_large">
+                    <div>
+                        <template if:false={isFirstStep}>
+                            <lightning-button label="Back" onclick={handlePrevious}></lightning-button>
+                        </template>
+                    </div>
+                    <div>
+                        <lightning-button variant="brand" label={primaryButtonLabel} onclick={handlePrimaryAction}></lightning-button>
+                    </div>
                 </div>
             </template>
-
-            <template if:true={errorMessage}>
-                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium" role="alert">
-                    <h2>{errorMessage}</h2>
-                </div>
-            </template>
-
         </div>
     </lightning-card>
 </template>
