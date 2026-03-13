@@ -5,6 +5,8 @@ import createAccount from '@salesforce/apex/QuickAccountController.createAccount
 export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
+    @track currentPage = 1;
+    @track totalPages = 2;
 
     formData = {
         name: '',
@@ -75,6 +77,37 @@ export default class QuickAccountWizard extends LightningElement {
         }
     }
 
+    // Navigation methods
+    handleNext() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+        }
+    }
+
+    handlePrevious() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+        }
+    }
+
+    // Getters for page visibility
+    get isPage1() {
+        return this.currentPage === 1;
+    }
+
+    get isPage2() {
+        return this.currentPage === 2;
+    }
+
+    // Progress calculation
+    get progressPercentage() {
+        return (this.currentPage / this.totalPages) * 100;
+    }
+
+    get progressStyle() {
+        return `width: ${this.progressPercentage}%`;
+    }
+
     handleCreate() {
         this.successMessage = '';
         this.errorMessage = '';
@@ -126,10 +159,11 @@ export default class QuickAccountWizard extends LightningElement {
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
-            this.template.querySelectorAll('lightning-input, lightning-combobox').forEach(input => {
+            this.template.querySelectorAll('lightning-input, lightning-textarea').forEach(input => {
                 input.value = null;
             });
             this.formData = {}; 
+            this.currentPage = 1; // Reset to first page after successful creation
         })
         .catch(error => {
             this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
