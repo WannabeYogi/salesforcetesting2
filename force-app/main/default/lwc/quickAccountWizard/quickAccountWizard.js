@@ -6,7 +6,7 @@ export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
     @track currentPage = 1;
-    @track totalPages = 4;
+    @track totalPages = 1;
 
     formData = {
         name: '',
