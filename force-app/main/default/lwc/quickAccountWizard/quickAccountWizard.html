@@ -9,15 +9,21 @@
                         <div class="slds-progress__value" style={progressStyle}></div>
                     </div>
                     <ul class="slds-progress__list">
-                        <li class="slds-progress__item slds-is-completed">
-                            <span class="slds-progress__marker slds-progress__marker_icon">
-                                <lightning-icon icon-name="utility:check" size="xx-small"></lightning-icon>
-                            </span>
+                        <li class="slds-progress__item">
+                            <span class="slds-progress__marker" class:slds-progress__marker_active={isPage1} class:slds-is-completed={currentPage > 1}></span>
                             <span class="slds-progress__label">Basic Info</span>
                         </li>
                         <li class="slds-progress__item">
-                            <span class="slds-progress__marker" class:slds-progress__marker_active={isPage2}></span>
-                            <span class="slds-progress__label">Contact Details</span>
+                            <span class="slds-progress__marker" class:slds-progress__marker_active={isPage2} class:slds-is-completed={currentPage > 2}></span>
+                            <span class="slds-progress__label">Business Details</span>
+                        </li>
+                        <li class="slds-progress__item">
+                            <span class="slds-progress__marker" class:slds-progress__marker_active={isPage3} class:slds-is-completed={currentPage > 3}></span>
+                            <span class="slds-progress__label">Address</span>
+                        </li>
+                        <li class="slds-progress__item">
+                            <span class="slds-progress__marker" class:slds-progress__marker_active={isPage4}></span>
+                            <span class="slds-progress__label">Contact Info</span>
                         </li>
                     </ul>
                 </div>
@@ -27,14 +33,39 @@
             <template if:true={isPage1}>
                 <div class="slds-border_bottom slds-m-bottom_medium">
                     <h2 class="slds-text-heading_medium">Step 1: Basic Account Information</h2>
-                    <p class="slds-text-color_weak slds-m-bottom_small">Enter the corporate details below.</p>
+                    <p class="slds-text-color_weak slds-m-bottom_small">Enter the essential account details below.</p>
                 </div>
 
                 <lightning-layout multiple-rows="true">
-                    
                     <lightning-layout-item size="6" padding="horizontal-small">
                         <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                        <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                         <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item size="6" padding="horizontal-small">
+                        <lightning-input label="Website" type="url" data-id="accWebsite" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                        <lightning-input label="Company Type" data-id="accType" placeholder="e.g., Corporation, Partnership" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                        <lightning-textarea 
+                            label="Company Description" 
+                            data-id="accDescription" 
+                            placeholder="Enter a brief description of the company's business..."
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-textarea>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+
+            <!-- Page 2: Business Details -->
+            <template if:true={isPage2}>
+                <div class="slds-border_bottom slds-m-bottom_medium">
+                    <h2 class="slds-text-heading_medium">Step 2: Business Details</h2>
+                    <p class="slds-text-color_weak slds-m-bottom_small">Enter industry, revenue, and employee information.</p>
+                </div>
+
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6" padding="horizontal-small">
                         <lightning-input 
                             label="Industry" 
                             data-id="accIndustry"
@@ -55,44 +86,79 @@
                             onchange={handleInputChange}
                             class="slds-m-bottom_small">
                         </lightning-input>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item size="6" padding="horizontal-small">
+                        <lightning-input label="Employees" type="number" data-id="accEmployees" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
                         <lightning-input 
-                            label="Company Type" 
-                            data-id="accType" 
-                            placeholder="e.g., Corporation, Partnership" 
+                            label="Ticker Symbol" 
+                            data-id="accTicker" 
+                            placeholder="e.g., AAPL, MSFT" 
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-input>
+                        <lightning-input 
+                            label="Ownership" 
+                            data-id="accOwnership" 
+                            placeholder="e.g., Public, Private, Subsidiary" 
                             onchange={handleInputChange}
                             class="slds-m-bottom_small">
                         </lightning-input>
                     </lightning-layout-item>
-
-                    <lightning-layout-item size="6" padding="horizontal-small">
-                        <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Website" type="url" data-id="accWebsite" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Employees" type="number" data-id="accEmployees" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Billing City" data-id="accCity" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Billing State/Province" data-id="accState" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Billing Postal Code" data-id="accPostalCode" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                        <lightning-input label="Billing Country" data-id="accCountry" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
-                    </lightning-layout-item>
                 </lightning-layout>
+            </template>
 
-                <lightning-layout>
-                    <lightning-layout-item size="12" padding="horizontal-small">
-                        <lightning-textarea 
-                            label="Company Description" 
-                            data-id="accDescription" 
-                            placeholder="Enter a brief description of the company's business, products, or services..."
+            <!-- Page 3: Address -->
+            <template if:true={isPage3}>
+                <div class="slds-border_bottom slds-m-bottom_medium">
+                    <h2 class="slds-text-heading_medium">Step 3: Address</h2>
+                    <p class="slds-text-color_weak slds-m-bottom_small">Enter the account's address.</p>
+                </div>
+
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6" padding="horizontal-small">
+                        <lightning-input 
+                            label="Street" 
+                            data-id="accStreet" 
                             onchange={handleInputChange}
                             class="slds-m-bottom_small">
-                        </lightning-textarea>
+                        </lightning-input>
+                        <lightning-input 
+                            label="City" 
+                            data-id="accCity" 
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-input>
+                        <lightning-input 
+                            label="State/Province" 
+                            data-id="accState" 
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-input>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item size="6" padding="horizontal-small">
+                        <lightning-input 
+                            label="Zip/Postal Code" 
+                            data-id="accZip" 
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-input>
+                        <lightning-input 
+                            label="Country" 
+                            data-id="accCountry" 
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_small">
+                        </lightning-input>
                     </lightning-layout-item>
                 </lightning-layout>
             </template>
 
-            <!-- Page 2: Contact and Additional Details -->
-            <template if:true={isPage2}>
+            <!-- Page 4: Contact Information -->
+            <template if:true={isPage4}>
                 <div class="slds-border_bottom slds-m-bottom_medium">
-                    <h2 class="slds-text-heading_medium">Step 2: Contact Information & Additional Details</h2>
-                    <p class="slds-text-color_weak slds-m-bottom_small">Enter the main contact details and additional information for this account.</p>
+                    <h2 class="slds-text-heading_medium">Step 4: Contact Information</h2>
+                    <p class="slds-text-color_weak slds-m-bottom_small">Enter the main contact details for this account.</p>
                 </div>
 
                 <lightning-layout multiple-rows="true">
@@ -159,25 +225,6 @@
                             class="slds-m-bottom_small">
                         </lightning-input>
                         <lightning-input 
-                            label="Ticker Symbol" 
-                            data-id="accTicker" 
-                            placeholder="e.g., AAPL, MSFT" 
-                            onchange={handleInputChange}
-                            class="slds-m-bottom_small">
-                        </lightning-input>
-                        <lightning-input 
-                            label="Ownership" 
-                            data-id="accOwnership" 
-                            placeholder="e.g., Public, Private, Subsidiary" 
-                            onchange={handleInputChange}
-                            class="slds-m-bottom_small">
-                        </lightning-input>
-                    </lightning-layout-item>
-                </lightning-layout>
-
-                <lightning-layout multiple-rows="true">
-                    <lightning-layout-item size="6" padding="horizontal-small">
-                        <lightning-input 
                             label="SIC Code" 
                             data-id="accSicCode" 
                             onchange={handleInputChange}
@@ -208,6 +255,40 @@
                 </template>
 
                 <template if:true={isPage2}>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Previous" 
+                        title="Go to Previous Step" 
+                        onclick={handlePrevious}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Next" 
+                        title="Go to Next Step" 
+                        onclick={handleNext}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                </template>
+
+                <template if:true={isPage3}>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Previous" 
+                        title="Go to Previous Step" 
+                        onclick={handlePrevious}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Next" 
+                        title="Go to Next Step" 
+                        onclick={handleNext}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                </template>
+
+                <template if:true={isPage4}>
                     <lightning-button 
                         variant="neutral" 
                         label="Previous" 

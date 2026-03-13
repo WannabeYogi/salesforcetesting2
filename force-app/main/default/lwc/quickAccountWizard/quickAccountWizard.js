@@ -6,7 +6,7 @@ export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
     @track errorMessage = '';
     @track currentPage = 1;
-    @track totalPages = 2;
+    @track totalPages = 4;
 
     formData = {
         name: '',
@@ -17,6 +17,7 @@ export default class QuickAccountWizard extends LightningElement {
         revenue: '', 
         revenueRange: '',
         employees: null,
+        street: '',
         city: '',
         state: '',
         postalCode: '',
@@ -49,8 +50,10 @@ export default class QuickAccountWizard extends LightningElement {
             'accRevenue': 'revenue',
             'accRevenueRange': 'revenueRange',
             'accEmployees': 'employees',
+            'accStreet': 'street',
             'accCity': 'city',
             'accState': 'state',
+            'accZip': 'postalCode',
             'accPostalCode': 'postalCode',
             'accCountry': 'country',
             'accType': 'type',
@@ -99,6 +102,14 @@ export default class QuickAccountWizard extends LightningElement {
         return this.currentPage === 2;
     }
 
+    get isPage3() {
+        return this.currentPage === 3;
+    }
+
+    get isPage4() {
+        return this.currentPage === 4;
+    }
+
     // Progress calculation
     get progressPercentage() {
         return (this.currentPage / this.totalPages) * 100;
@@ -138,6 +149,7 @@ export default class QuickAccountWizard extends LightningElement {
             revenue: cleanRevenue,
             revenueRange: this.formData.revenueRange,
             employees: this.formData.employees,
+            street: this.formData.street,
             city: this.formData.city,
             state: this.formData.state,
             postalCode: this.formData.postalCode,
