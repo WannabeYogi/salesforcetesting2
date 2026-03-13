@@ -63,6 +63,14 @@
                             class="slds-m-bottom_small">
                         </lightning-input>
                     </lightning-layout-item>
+                    <!-- Company cType -->
+                    <lightning-input 
+                        label="Company Type" 
+                        data-id="accType" 
+                        placeholder="e.g., Corporation, Partnership" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
 
                     <lightning-layout-item size="6" padding="horizontal-small">
                         <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
@@ -94,6 +102,133 @@
                     <h2 class="slds-text-heading_medium">Step 2: Contact Information & Additional Details</h2>
                     <p class="slds-text-color_weak slds-m-bottom_small">Enter the main contact details and additional information for this account.</p>
                 </div>
+            </lightning-layout>
+            
+            <!-- Additionalvv gccvgfjhhjhhh Section -->
+            <div class="slds-border_bottom slds-m-top_large slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium">Additional Information</h2>
+                <p class="slds-text-color_weak slds-m-bottom_small">Provide more details about the company.</p>
+            </div>
+            
+            <lightning-layout>
+                <lightning-layout-item size="12" padding="horizontal-small">
+                    <lightning-textarea 
+                        label="Company Description" 
+                        data-id="accDescription" 
+                        placeholder="Enter a brief description of the company's business, products, or services..."
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-textarea>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+            <!-- Contact Inforffmavvtgtivflkfrvvjhfnhfnffogfdggvfgfgfn Sxdefvfrfction -->
+            <div class="slds-border_bottom slds-m-top_large slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium">Primary Contact Information</h2>
+                <p class="slds-text-color_weak slds-m-bottom_small">Enter the main contact details for this account.</p>
+            </div>
+            
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input 
+                        label="Primary Contact Name" 
+                        data-id="accPrimaryContact" 
+                        placeholder="e.g., John Smith" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Primary Contact Title" 
+                        data-id="accContactTitle" 
+                        placeholder="e.g., CEO, CFO" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Primary Contact Email" 
+                        type="email" 
+                        data-id="accContactEmail" 
+                        placeholder="john.smith@company.com" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Primary Contact Phone" 
+                        type="tel" 
+                        data-id="accContactPhone" 
+                        placeholder="(555) 123-4567" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                </lightning-layout-item>
+                
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input 
+                        label="Fax" 
+                        type="tel" 
+                        data-id="accFax" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Rating" 
+                        data-id="accRating" 
+                        placeholder="e.g., Hot, Warm, Cold" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Customer Priority" 
+                        data-id="accCustomerPriority" 
+                        placeholder="e.g., High, Medium, Low" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="SLA Expiration Date" 
+                        type="date" 
+                        data-id="accSlaExpiration" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input 
+                        label="Ticker Symbol" 
+                        data-id="accTicker" 
+                        placeholder="e.g., AAPL, MSFT" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Ownership" 
+                        data-id="accOwnership" 
+                        placeholder="e.g., Public, Private, Subsidiary" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                </lightning-layout-item>
+                
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input 
+                        label="SIC Code" 
+                        data-id="accSicCode" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-input 
+                        label="Year Started" 
+                        type="text" 
+                        data-id="accYearStarted" 
+                        placeholder="e.g., 2010" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
 
                 <lightning-layout multiple-rows="true">
                     <lightning-layout-item size="6" padding="horizontal-small">
