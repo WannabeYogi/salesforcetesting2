@@ -42,7 +42,6 @@ jobs:
         run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
 
       - name: Trigger Jataka Kamikaze Pods
-        if: github.event_name == 'pull_request'
         run: |
           curl -X POST "${{ secrets.JATAKA_API_URL }}/api/integrations/github/trigger" \
             -H "Authorization: Bearer ${{ secrets.JATAKA_API_KEY }}" \
