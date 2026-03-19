@@ -140,7 +140,7 @@ export default class QuickAccountWizard extends LightningElement {
     handleIndustryChange(event) {
         this.formData.industry = event.detail.value;
         
-        // Auto-populate account type based on industry
+        // Auto-populate account type / based on industry
         if (event.detail.value === 'Technology' || event.detail.value === 'Finance') {
             this.formData.type = 'Prospect';
             const typeCombo = this.template.querySelector('lightning-combobox[name="accountType"]');
