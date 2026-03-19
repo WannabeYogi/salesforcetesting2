@@ -1,310 +1,67 @@
 <template>
-    <lightning-card title="New Enterprise Account" icon-name="standard:account">
-        <div class="slds-p-around_large">
+    <lightning-card title="New Account" icon-name="standard:account">
+        <div class="slds-p-around_medium">
             
-            <!-- Progress Indicator -->
-            <div class="slds-m-bottom_large">
-                <lightning-progress-indicator 
-                    current-step="1" 
-                    type="base" 
-                    variant="base">
-                    <lightning-progress-step 
-                        label="Basic Info" 
-                        value="1">
-                    </lightning-progress-step>
-                    <lightning-progress-step 
-                        label="Business Details" 
-                        value="2">
-                    </lightning-progress-step>
-                    <lightning-progress-step 
-                        label="Technology" 
-                        value="3">
-                    </lightning-progress-step>
-                </lightning-progress-indicator>
+            <lightning-input 
+                label="Account Name" 
+                data-id="accName" 
+                required 
+                onchange={handleInputChange} 
+                class="slds-m-bottom_small"
+                placeholder="Enter account name">
+            </lightning-input>
+            
+            <lightning-input 
+                label="Phone" 
+                type="tel" 
+                data-id="accPhone" 
+                required 
+                onchange={handlePhoneChange} 
+                class="slds-m-bottom_small"
+                placeholder="(555) 123-4567">
+            </lightning-input>
+            
+            <lightning-input 
+                label="Website" 
+                type="url" 
+                data-id="accWebsite" 
+                required 
+                onchange={handleInputChange} 
+                class="slds-m-bottom_small"
+                placeholder="https://www.example.com">
+            </lightning-input>
+            
+            <lightning-input 
+                label="Industry" 
+                data-id="accIndustry" 
+                required 
+                onchange={handleInputChange} 
+                class="slds-m-bottom_small"
+                placeholder="Enter industry">
+            </lightning-input>
+
+            <div class="slds-align_absolute-center slds-m-top_large">
+                <lightning-button 
+                    variant="brand" 
+                    label="Save Account" 
+                    title="Save Account" 
+                    onclick={handleCreate}
+                    class="create-btn">
+                </lightning-button>
             </div>
 
-            <!-- Success Message -->
             <template if:true={successMessage}>
-                <div class="slds-notify_container slds-m-bottom_large">
-                    <div class="slds-notify slds-notify_toast slds-theme_success" role="alert">
-                        <span class="slds-assistive-text">success</span>
-                        <lightning-icon icon-name="utility:success" size="x-small" alternative-text="Success"></lightning-icon>
-                        <div class="slds-notify__content">
-                            <h2 class="slds-text-heading_small slds-m-top_xx-small">{successMessage}</h2>
-                        </div>
-                    </div>
+                <div class="slds-notify slds-notify_alert slds-alert_success slds-m-top_medium" role="alert">
+                    <span class="slds-assistive-text">success</span>
+                    <h2>{successMessage}</h2>
                 </div>
             </template>
 
-            <!-- Error Message -->
             <template if:true={errorMessage}>
-                <div class="slds-notify_container slds-m-bottom_large">
-                    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
-                        <span class="slds-assistive-text">error</span>
-                        <lightning-icon icon-name="utility:error" size="x-small" alternative-text="Error"></lightning-icon>
-                        <div class="slds-notify__content">
-                            <h2 class="slds-text-heading_small slds-m-top_xx-small">{errorMessage}</h2>
-                        </div>
-                    </div>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium" role="alert">
+                    <h2>{errorMessage}</h2>
                 </div>
             </template>
-
-            <!-- Section 1: Basic Information -->
-            <div class="slds-section slds-m-bottom_large">
-                <h3 class="slds-section__title slds-theme_shade">
-                    <span class="slds-truncate slds-p-horizontal_small" title="no so Basic Information">
-                        <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
-                        Basic Information
-                    </span>
-                </h3>
-                <div class="slds-section__content">
-                    <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Account Name" 
-                                data-id="accName" 
-                                required 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="Enter company name">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Account Number" 
-                                data-id="accNumber" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="Internal account number">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Phone" 
-                                type="tel" 
-                                data-id="accPhone" 
-                                onchange={handlePhoneChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="(555) 123-4567">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Website" 
-                                type="url" 
-                                data-id="accWebsite" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="https://www.example.com">
-                            </lightning-input>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </div>
-            </div>
-
-            <!-- Section 2: Business Details -->
-            <div class="slds-section slds-m-bottom_large">
-                <h3 class="slds-section__title slds-theme_shade">
-                    <span class="slds-truncate slds-p-horizontal_small" title="Business Details">
-                        <lightning-icon icon-name="utility:business_card" size="x-small"></lightning-icon>
-                        Business Details
-                    </span>
-                </h3>
-                <div class="slds-section__content">
-                    <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-combobox
-                                name="industry"
-                                label="Industry"
-                                placeholder="Select Industry..."
-                                options={industryOptions}
-                                onchange={handleIndustryChange}
-                                class="slds-m-bottom_small">
-                            </lightning-combobox>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-combobox
-                                name="accountType"
-                                label="Account Type"
-                                placeholder="Select Account Type..."
-                                options={accountTypeOptions}
-                                onchange={handleInputChange}
-                                data-id="accType"
-                                class="slds-m-bottom_small">
-                            </lightning-combobox>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Annual Revenue" 
-                                data-id="accRevenue" 
-                                formatter="currency"
-                                onchange={handleRevenueChange}
-                                onblur={formatRevenue}
-                                class="slds-m-bottom_small"
-                                placeholder="$0">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-combobox
-                                name="revenueRange"
-                                label="Revenue Range"
-                                placeholder="Select Revenue Range..."
-                                options={revenueRangeOptions}
-                                onchange={handleInputChange}
-                                data-id="accRevenueRange"
-                                class="slds-m-bottom_small">
-                            </lightning-combobox>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Employees" 
-                                type="number" 
-                                data-id="accEmployees" 
-                                onchange={handleInputChange}
-                                class="slds-m-bottom_small"
-                                placeholder="Number of employees"
-                                min="1">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Account Source" 
-                                data-id="accSource" 
-                                onchange={handleInputChange}
-                                class="slds-m-bottom_small"
-                                placeholder="How did you find this account?">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Ownership" 
-                                data-id="accOwnership" 
-                                onchange={handleInputChange}
-                                class="slds-m-bottom_small"
-                                placeholder="e.g., Private, Public">
-                            </lightning-input>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </div>
-            </div>
-
-            <!-- Section 3: Address Information -->
-            <div class="slds-section slds-m-bottom_large">
-                <h3 class="slds-section__title slds-theme_shade">
-                    <span class="slds-truncate slds-p-horizontal_small" title="Address Information">
-                        <lightning-icon icon-name="utility:location" size="x-small"></lightning-icon>
-                        Billing Address
-                    </span>
-                </h3>
-                <div class="slds-section__content">
-                    <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Billing City" 
-                                data-id="accCity" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="City">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Billing State/Province" 
-                                data-id="accState" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="State or Province">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Billing Postal Code" 
-                                data-id="accPostalCode" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="ZIP or Postal Code">
-                            </lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" padding="horizontal-small">
-                            <lightning-input 
-                                label="Billing Country" 
-                                data-id="accCountry" 
-                                onchange={handleInputChange} 
-                                class="slds-m-bottom_small"
-                                placeholder="Country">
-                            </lightning-input>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </div>
-            </div>
-
-            <!-- Section 4: Technology Stack -->
-            <div class="slds-section slds-m-bottom_large">
-                <h3 class="slds-section__title slds-theme_shade">
-                    <span class="slds-truncate slds-p-horizontal_small" title="Technology Stack">
-                        <lightning-icon icon-name="utility:desktop" size="x-small"></lightning-icon>
-                        Technology Stack
-                    </span>
-                </h3>
-                <div class="slds-section__content">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                            <div class="slds-box slds-box_x-small slds-m-bottom_small">
-                                <h4 class="slds-text-heading_small slds-m-bottom_x-small">
-                                    <lightning-icon icon-name="utility:desktop_and_mobile" size="x-small"></lightning-icon>
-                                    Mac Devices
-                                </h4>
-                                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
-                                    Select all Mac devices used by the organization
-                                </p>
-                                <lightning-checkbox-group
-                                    name="macDevices"
-                                    options={macDeviceOptions}
-                                    value={selectedMacDevices}
-                                    onchange={handleMacDeviceChange}>
-                                </lightning-checkbox-group>
-                            </div>
-                        </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                            <div class="slds-box slds-box_x-small slds-m-bottom_small">
-                                <h4 class="slds-text-heading_small slds-m-bottom_x-small">
-                                    <lightning-icon icon-name="utility:desktop" size="x-small"></lightning-icon>
-                                    Windows Devices
-                                </h4>
-                                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
-                                    Select all Windows devices used by the organization
-                                </p>
-                                <lightning-checkbox-group
-                                    name="windowsDevices"
-                                    options={windowsDeviceOptions}
-                                    value={selectedWindowsDevices}
-                                    onchange={handleWindowsDeviceChange}>
-                                </lightning-checkbox-group>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="slds-grid slds-grid_align-center slds-m-top_large">
-                <div class="slds-col slds-no-flex">
-                    <lightning-button 
-                        variant="neutral" 
-                        label="Cancel" 
-                        title="Cancel" 
-                        onclick={handleCancel}
-                        class="slds-m-right_small">
-                    </lightning-button>
-                    <lightning-button 
-                        variant="brand" 
-                        label="Create Account" 
-                        title="Create Account" 
-                        onclick={handleCreate}
-                        class="create-btn">
-                    </lightning-button>
-                </div>
-            </div>
 
         </div>
     </lightning-card>
