@@ -49,8 +49,8 @@ jobs:
             -d '{
               "installation_id": ${{ secrets.JATAKA_INSTALLATION_ID }},
               "repo_full_name": "${{ github.repository }}",
-              "branch": "${{ github.head_ref  }}",
-              "pr_number": ${{ github.event.pull_request.number || 47 }}
+              "branch": "${{ github.ref_name }}",
+              "pr_number": ${{ github.event.pull_request.number || 47 }},
               "action": "${{ github.event.action }}",
               "before_sha": "${{ github.event.before }}"
             }'
