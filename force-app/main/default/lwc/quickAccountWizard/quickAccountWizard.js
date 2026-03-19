@@ -274,4 +274,52 @@ export default class QuickAccountWizard extends LightningElement {
             this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
         });
     }
+
+    handleCancel() {
+        // Clear all form data
+        this.formData = {
+            name: '',
+            accNumber: '',
+            phone: '',
+            website: '',
+            industry: '',
+            revenue: '', 
+            revenueRange: '',
+            employees: null,
+            city: '',
+            state: '',
+            postalCode: '',
+            country: '',
+            type: '',
+            source: '',
+            description: '',
+            primaryContact: '',
+            contactTitle: '',
+            contactEmail: '',
+            contactPhone: '',
+            fax: '',
+            rating: '',
+            customerPriority: '',
+            slaExpiration: '',
+            ticker: '',
+            ownership: '',
+            sicCode: '',
+            yearStarted: '',
+            macDevices: '',
+            windowsDevices: ''
+        };
+        
+        // Clear all form fields
+        this.template.querySelectorAll('lightning-input, lightning-combobox, lightning-checkbox-group').forEach(input => {
+            input.value = null;
+        });
+        
+        // Clear checkbox selections
+        this.selectedMacDevices = [];
+        this.selectedWindowsDevices = [];
+        
+        // Clear messages
+        this.successMessage = '';
+        this.errorMessage = '';
+    }
 }
