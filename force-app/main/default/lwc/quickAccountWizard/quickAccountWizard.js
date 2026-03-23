@@ -94,7 +94,8 @@ export default class QuickAccountWizard extends LightningElement {
         macDevices: '',
         windowsDevices: ''
     };
-
+    
+    //test
     // REMOVED: get industryOptions() {...} is no longer needed
 
     handleInputChange(event) {
