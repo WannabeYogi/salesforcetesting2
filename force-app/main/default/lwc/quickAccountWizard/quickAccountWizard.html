@@ -1,55 +1,239 @@
 <template>
-    <lightning-card title="New Account" icon-name="standard:account">
+    <lightning-card title="New Account Wizard" icon-name="standard:account">
         <div class="slds-p-around_medium">
             
-            <lightning-input 
-                label="Account Name" 
-                data-id="accName" 
-                required 
-                onchange={handleInputChange} 
-                class="slds-m-bottom_small"
-                placeholder="Enter account name">
-            </lightning-input>
-            
-            <lightning-input 
-                label="Phone" 
-                type="tel" 
-                data-id="accPhone" 
-                required 
-                onchange={handlePhoneChange} 
-                class="slds-m-bottom_small"
-                placeholder="(555) 123-7699">
-            </lightning-input>
-            
-            <lightning-input 
-                label="Website address" 
-                type="url" 
-                data-id="accWebsite" 
-                required 
-                onchange={handleInputChange} 
-                class="slds-m-bottom_small"
-                placeholder="https://www.example.com">
-            </lightning-input>
-            
-            <lightning-input 
-                label="Industry" 
-                data-id="accIndustry" 
-                required 
-                onchange={handleInputChange} 
-                class="slds-m-bottom_small"
-                placeholder="Enter industry">
-            </lightning-input>
-
-            <div class="slds-align_absolute-center slds-m-top_large">
-                <lightning-button 
-                    variant="brand" 
-                    label="Save Account" 
-                    title="Save Account" 
-                    onclick={handleCreate}
-                    class="create-btn">
-                </lightning-button>
+            <!-- Progress Indicator -->
+            <div class="slds-progress slds-progress_shallow slds-m-bottom_large">
+                <ol class="slds-progress__list">
+                    <li class="slds-progress__item slds-is-completed">
+                        <span class="slds-progress__marker"></span>
+                        <span class="slds-progress__label">Basic Info</span>
+                    </li>
+                    <li class="slds-progress__item slds-is-completed">
+                        <span class="slds-progress__marker"></span>
+                        <span class="slds-progress__label">Contact Details</span>
+                    </li>
+                    <li class="slds-progress__item slds-is-completed">
+                        <span class="slds-progress__marker"></span>
+                        <span class="slds-progress__label">Business Details</span>
+                    </li>
+                    <li class="slds-progress__item slds-is-completed">
+                        <span class="slds-progress__marker"></span>
+                        <span class="slds-progress__label">Address & Review</span>
+                    </li>
+                </ol>
             </div>
 
+            <!-- Page 1: Basic Information -->
+            <template if:true={isPage1}>
+                <div class="page-content">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Step 1: Basic Information</h2>
+                    
+                    <lightning-input 
+                        label="Account Name" 
+                        data-id="accName" 
+                        required 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="Enter account name">
+                    </lightning-input>
+                    
+                    <lightning-combobox
+                        label="Account Type"
+                        data-id="accType"
+                        required
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small"
+                        options={typeOptions}
+                        placeholder="Select account type">
+                    </lightning-combobox>
+
+                    <lightning-input 
+                        label="Description" 
+                        data-id="accDescription" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        type="text"
+                        placeholder="Brief description of the account">
+                    </lightning-input>
+                </div>
+            </template>
+
+            <!-- Page 2: Contact Details -->
+            <template if:true={isPage2}>
+                <div class="page-content">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Step 2: Contact Details</h2>
+                    
+                    <lightning-input 
+                        label="Phone" 
+                        type="tel" 
+                        data-id="accPhone" 
+                        required 
+                        onchange={handlePhoneChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="(555) 123-7699">
+                    </lightning-input>
+                    
+                    <lightning-input 
+                        label="Website address" 
+                        type="url" 
+                        data-id="accWebsite" 
+                        required 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="https://www.example.com">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Email" 
+                        type="email" 
+                        data-id="accEmail" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="contact@example.com">
+                    </lightning-input>
+                </div>
+            </template>
+
+            <!-- Page 3: Business Details -->
+            <template if:true={isPage3}>
+                <div class="page-content">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Step 3: Business Details</h2>
+                    
+                    <lightning-combobox
+                        label="Industry"
+                        data-id="accIndustry"
+                        required
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small"
+                        options={industryOptions}
+                        placeholder="Select industry">
+                    </lightning-combobox>
+
+                    <lightning-input 
+                        label="Annual Revenue" 
+                        type="number" 
+                        data-id="accRevenue" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        formatter="currency"
+                        placeholder="0">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Number of Employees" 
+                        type="number" 
+                        data-id="accEmployees" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="0">
+                    </lightning-input>
+                </div>
+            </template>
+
+            <!-- Page 4: Address & Review -->
+            <template if:true={isPage4}>
+                <div class="page-content">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Step 4: Address & Review</h2>
+                    
+                    <lightning-input 
+                        label="Billing Street" 
+                        data-id="accBillingStreet" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="123 Main St">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Billing City" 
+                        data-id="accBillingCity" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="San Francisco">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Billing State/Province" 
+                        data-id="accBillingState" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="CA">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Billing Postal Code" 
+                        data-id="accBillingPostalCode" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="94105">
+                    </lightning-input>
+
+                    <lightning-input 
+                        label="Billing Country" 
+                        data-id="accBillingCountry" 
+                        onchange={handleInputChange} 
+                        class="slds-m-bottom_small"
+                        placeholder="United States">
+                    </lightning-input>
+
+                    <!-- Summary Section -->
+                    <div class="slds-box slds-m-top_large slds-theme_shade">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Account Summary</h3>
+                        <template if:true={formData.name}>
+                            <p><strong>Name:</strong> {formData.name}</p>
+                        </template>
+                        <template if:true={formData.type}>
+                            <p><strong>Type:</strong> {formData.type}</p>
+                        </template>
+                        <template if:true={formData.phone}>
+                            <p><strong>Phone:</strong> {formData.phone}</p>
+                        </template>
+                        <template if:true={formData.website}>
+                            <p><strong>Website:</strong> {formData.website}</p>
+                        </template>
+                        <template if:true={formData.industry}>
+                            <p><strong>Industry:</strong> {formData.industry}</p>
+                        </template>
+                        <template if:true={formData.revenue}>
+                            <p><strong>Revenue:</strong> ${formData.revenue}</p>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Navigation Buttons -->
+            <div class="slds-grid slds-grid_align-space slds-m-top_large">
+                <div class="slds-col">
+                    <template if:true={showPrevious}>
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Previous" 
+                            onclick={handlePrevious}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                    </template>
+                </div>
+                <div class="slds-col slds-text-align_right">
+                    <template if:true={showNext}>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Next" 
+                            onclick={handleNext}
+                            class="slds-m-left_small">
+                        </lightning-button>
+                    </template>
+                    <template if:true={showSubmit}>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Create Account" 
+                            onclick={handleCreate}
+                            class="slds-m-left_small">
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Messages -->
             <template if:true={successMessage}>
                 <div class="slds-notify slds-notify_alert slds-alert_success slds-m-top_medium" role="alert">
                     <span class="slds-assistive-text">success</span>
