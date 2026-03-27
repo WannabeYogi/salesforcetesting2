@@ -29,7 +29,7 @@ public with sharing class QuickAccountController {
         String yearStarted
     ) {
         try {
-            //testing the  SCRUM-45
+            //testing functionality
             // --- NEW BUSINESS LOGIC ---
             // Requirement: Enterprise accounts must have > $10M Revenue
             
@@ -87,6 +87,40 @@ public with sharing class QuickAccountController {
                 Ownership = ownership,
                 Sic = sicCode != null ? sicCode : null,
                 YearStarted = yearStarted
+            );
+            
+            // Allow duplicates for demo purposes
+            Database.DMLOptions dml = new Database.DMLOptions();
+            dml.DuplicateRuleHeader.allowSave = true; 
+            dml.DuplicateRuleHeader.runAsCurrentUser = true;
+            
+            Database.SaveResult sr = Database.insert(newAcc, dml);
+            
+            if (sr.isSuccess()) {
+                return newAcc;
+            } else {
+                throw new AuraHandledException('Error: ' + sr.getErrors()[0].getMessage());
+            }
+
+        } catch (Exception e) {
+            // Pass the error back to the LWC
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static Account createSimpleAccount(
+        String name,
+        String phone,
+        String website,
+        String industry
+    ) {
+        try {
+            Account newAcc = new Account(
+                Name = name,
+                Phone = phone,
+                Website = website,
+                Industry = industry
             );
             
             // Allow duplicates for demo purposes

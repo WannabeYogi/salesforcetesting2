@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
 
-import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
+import createSimpleAccount from '@salesforce/apex/QuickAccountController.createSimpleAccount';
 
 export default class QuickAccountWizard extends LightningElement {
     @track successMessage = '';
@@ -100,33 +100,11 @@ export default class QuickAccountWizard extends LightningElement {
             return;
         }
 
-        createAccount({ 
+        createSimpleAccount({ 
             name: this.formData.name,
-            accNumber: null,
             phone: this.formData.phone,
             website: this.formData.website,
-            industry: this.formData.industry,
-            revenue: null,
-            revenueRange: null,
-            employees: null,
-            city: null,
-            state: null,
-            postalCode: null,
-            country: null,
-            type: null,
-            description: null,
-            primaryContact: null,
-            contactTitle: null,
-            contactEmail: null,
-            contactPhone: null,
-            fax: null,
-            rating: null,
-            customerPriority: null,
-            slaExpiration: null,
-            ticker: null,
-            ownership: null,
-            sicCode: null,
-            yearStarted: null
+            industry: this.formData.industry
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
