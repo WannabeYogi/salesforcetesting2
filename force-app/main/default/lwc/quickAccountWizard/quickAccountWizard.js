@@ -102,9 +102,31 @@ export default class QuickAccountWizard extends LightningElement {
 
         createAccount({ 
             name: this.formData.name,
+            accNumber: null,
             phone: this.formData.phone,
             website: this.formData.website,
-            industry: this.formData.industry
+            industry: this.formData.industry,
+            revenue: null,
+            revenueRange: null,
+            employees: null,
+            city: null,
+            state: null,
+            postalCode: null,
+            country: null,
+            type: null,
+            description: null,
+            primaryContact: null,
+            contactTitle: null,
+            contactEmail: null,
+            contactPhone: null,
+            fax: null,
+            rating: null,
+            customerPriority: null,
+            slaExpiration: null,
+            ticker: null,
+            ownership: null,
+            sicCode: null,
+            yearStarted: null
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
