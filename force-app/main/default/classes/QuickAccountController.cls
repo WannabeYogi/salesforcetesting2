@@ -133,15 +133,46 @@ public with sharing class QuickAccountController {
         String name,
         String phone,
         String website,
-        String industry
+        String industry,
+        String type,
+        String description,
+        String billingStreet,
+        String billingCity,
+        String billingState,
+        String billingPostalCode,
+        String billingCountry
     ) {
         try {
+            // Billing State/Province requires Billing Country. After-insert automation may set state
+            // on update; default country when omitted so FIELD_INTEGRITY does not fail.
+            String country = String.isNotBlank(billingCountry) ? billingCountry : 'United States';
+
             Account newAcc = new Account(
                 Name = name,
                 Phone = phone,
                 Website = website,
-                Industry = industry
+                Industry = industry,
+                BillingCountry = country
             );
+
+            if (String.isNotBlank(type)) {
+                newAcc.Type = type;
+            }
+            if (String.isNotBlank(description)) {
+                newAcc.Description = description;
+            }
+            if (String.isNotBlank(billingStreet)) {
+                newAcc.BillingStreet = billingStreet;
+            }
+            if (String.isNotBlank(billingCity)) {
+                newAcc.BillingCity = billingCity;
+            }
+            if (String.isNotBlank(billingState)) {
+                newAcc.BillingState = billingState;
+            }
+            if (String.isNotBlank(billingPostalCode)) {
+                newAcc.BillingPostalCode = billingPostalCode;
+            }
             
             // Allow duplicates for demo purposes
             Database.DMLOptions dml = new Database.DMLOptions();

@@ -250,11 +250,18 @@ export default class QuickAccountWizard extends LightningElement {
             return;
         }
 
-        createSimpleAccount({ 
+        createSimpleAccount({
             name: this.formData.name,
             phone: this.formData.phone,
             website: this.formData.website,
-            industry: this.formData.industry
+            industry: this.formData.industry,
+            type: this.formData.type || null,
+            description: this.formData.description || null,
+            billingStreet: this.formData.billingStreet || null,
+            billingCity: this.formData.billingCity || null,
+            billingState: this.formData.billingState || null,
+            billingPostalCode: this.formData.billingPostalCode || null,
+            billingCountry: this.formData.billingCountry || null
         })
         .then(result => {
             this.successMessage = `Account "${result.Name}" created successfully!`;
