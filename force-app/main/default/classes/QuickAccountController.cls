@@ -3,13 +3,15 @@ public with sharing class QuickAccountController {
      * AuraHandledException only surfaces its message to LWC/Aura clients when setMessage() is called.
      * Without it, the client shows a generic "Script-thrown exception".
      */
-    /** Returns Account so callers can `return throwAuraMessage(...)` — Apex does not treat void helpers as always throwing. */
-    private static Account throwAuraMessage(String message) {
+    /**
+     * Apex does not treat a void call as always throwing; callers append `return null` so the outer
+     * method satisfies return type Account. At runtime throw e runs first, so that return never executes.
+     */
+    private static void throwAuraMessage(String message) {
         String safe = String.isNotBlank(message) ? message : 'An unexpected error occurred.';
         AuraHandledException e = new AuraHandledException(safe);
         e.setMessage(safe);
         throw e;
-        return null;
     }
 
     @AuraEnabled
@@ -112,14 +114,17 @@ public with sharing class QuickAccountController {
             if (sr.isSuccess()) {
                 return newAcc;
             }
-            return throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
+            throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
+            return null;
 
         } catch (AuraHandledException e) {
             throw e;
         } catch (DmlException e) {
-            return throwAuraMessage(e.getDmlMessage(0));
+            throwAuraMessage(e.getDmlMessage(0));
+            return null;
         } catch (Exception e) {
-            return throwAuraMessage(e.getMessage());
+            throwAuraMessage(e.getMessage());
+            return null;
         }
     }
 
@@ -148,14 +153,17 @@ public with sharing class QuickAccountController {
             if (sr.isSuccess()) {
                 return newAcc;
             }
-            return throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
+            throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
+            return null;
 
         } catch (AuraHandledException e) {
             throw e;
         } catch (DmlException e) {
-            return throwAuraMessage(e.getDmlMessage(0));
+            throwAuraMessage(e.getDmlMessage(0));
+            return null;
         } catch (Exception e) {
-            return throwAuraMessage(e.getMessage());
+            throwAuraMessage(e.getMessage());
+            return null;
         }
     }
 }
