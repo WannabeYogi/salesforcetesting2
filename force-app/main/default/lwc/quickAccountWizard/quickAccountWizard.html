@@ -5,19 +5,19 @@
             <!-- Progress Indicator -->
             <div class="slds-progress slds-progress_shallow slds-m-bottom_large">
                 <ol class="slds-progress__list">
-                    <li class="slds-progress__item slds-is-completed">
+                    <li class="slds-progress__item {currentPage >= 1 ? 'slds-is-completed' : ''}">
                         <span class="slds-progress__marker"></span>
                         <span class="slds-progress__label">Basic Info</span>
                     </li>
-                    <li class="slds-progress__item slds-is-completed">
+                    <li class="slds-progress__item {currentPage >= 2 ? 'slds-is-completed' : ''}">
                         <span class="slds-progress__marker"></span>
                         <span class="slds-progress__label">Contact Details</span>
                     </li>
-                    <li class="slds-progress__item slds-is-completed">
+                    <li class="slds-progress__item {currentPage >= 3 ? 'slds-is-completed' : ''}">
                         <span class="slds-progress__marker"></span>
                         <span class="slds-progress__label">Business Details</span>
                     </li>
-                    <li class="slds-progress__item slds-is-completed">
+                    <li class="slds-progress__item {currentPage >= 4 ? 'slds-is-completed' : ''}">
                         <span class="slds-progress__marker"></span>
                         <span class="slds-progress__label">Address & Review</span>
                     </li>

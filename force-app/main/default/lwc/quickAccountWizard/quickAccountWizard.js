@@ -160,21 +160,29 @@ export default class QuickAccountWizard extends LightningElement {
             const typeInput = this.template.querySelector('[data-id="accType"]');
             
             if (!this.formData.name) {
-                nameInput.setCustomValidity("Account Name is required.");
-                nameInput.reportValidity();
+                if (nameInput) {
+                    nameInput.setCustomValidity("Account Name is required.");
+                    nameInput.reportValidity();
+                }
                 isValid = false;
             } else {
-                nameInput.setCustomValidity("");
-                nameInput.reportValidity();
+                if (nameInput) {
+                    nameInput.setCustomValidity("");
+                    nameInput.reportValidity();
+                }
             }
 
             if (!this.formData.type) {
-                typeInput.setCustomValidity("Account Type is required.");
-                typeInput.reportValidity();
+                if (typeInput) {
+                    typeInput.setCustomValidity("Account Type is required.");
+                    typeInput.reportValidity();
+                }
                 isValid = false;
             } else {
-                typeInput.setCustomValidity("");
-                typeInput.reportValidity();
+                if (typeInput) {
+                    typeInput.setCustomValidity("");
+                    typeInput.reportValidity();
+                }
             }
         } else if (this.currentPage === 2) {
             // Validate Contact Details
@@ -182,33 +190,45 @@ export default class QuickAccountWizard extends LightningElement {
             const websiteInput = this.template.querySelector('[data-id="accWebsite"]');
             
             if (!this.formData.phone) {
-                phoneInput.setCustomValidity("Phone is required.");
-                phoneInput.reportValidity();
+                if (phoneInput) {
+                    phoneInput.setCustomValidity("Phone is required.");
+                    phoneInput.reportValidity();
+                }
                 isValid = false;
             } else {
-                phoneInput.setCustomValidity("");
-                phoneInput.reportValidity();
+                if (phoneInput) {
+                    phoneInput.setCustomValidity("");
+                    phoneInput.reportValidity();
+                }
             }
 
             if (!this.formData.website) {
-                websiteInput.setCustomValidity("Website is required.");
-                websiteInput.reportValidity();
+                if (websiteInput) {
+                    websiteInput.setCustomValidity("Website is required.");
+                    websiteInput.reportValidity();
+                }
                 isValid = false;
             } else {
-                websiteInput.setCustomValidity("");
-                websiteInput.reportValidity();
+                if (websiteInput) {
+                    websiteInput.setCustomValidity("");
+                    websiteInput.reportValidity();
+                }
             }
         } else if (this.currentPage === 3) {
             // Validate Business Details
             const industryInput = this.template.querySelector('[data-id="accIndustry"]');
             
             if (!this.formData.industry) {
-                industryInput.setCustomValidity("Industry is required.");
-                industryInput.reportValidity();
+                if (industryInput) {
+                    industryInput.setCustomValidity("Industry is required.");
+                    industryInput.reportValidity();
+                }
                 isValid = false;
             } else {
-                industryInput.setCustomValidity("");
-                industryInput.reportValidity();
+                if (industryInput) {
+                    industryInput.setCustomValidity("");
+                    industryInput.reportValidity();
+                }
             }
         }
         
@@ -224,6 +244,12 @@ export default class QuickAccountWizard extends LightningElement {
             return;
         }
 
+        // Additional validation for required fields before submission
+        if (!this.formData.name || !this.formData.phone || !this.formData.website || !this.formData.industry) {
+            this.errorMessage = 'Please fill in all required fields before creating the account.';
+            return;
+        }
+
         createSimpleAccount({ 
             name: this.formData.name,
             phone: this.formData.phone,
@@ -235,6 +261,7 @@ export default class QuickAccountWizard extends LightningElement {
             this.resetForm();
         })
         .catch(error => {
+            console.error('Error creating account:', error);
             this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
         });
     }
