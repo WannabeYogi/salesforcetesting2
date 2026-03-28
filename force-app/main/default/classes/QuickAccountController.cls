@@ -14,6 +14,19 @@ public with sharing class QuickAccountController {
         throw e;
     }
 
+    /** Default country only — no state/address from the wizard (avoids picklist/trigger conflicts). */
+    private static void applyDefaultBillingCountryOnly(Account acc) {
+        Schema.DescribeFieldResult codeDesc = Account.BillingCountryCode.getDescribe();
+        if (codeDesc != null && codeDesc.isCreateable() && codeDesc.getType() == Schema.DisplayType.Picklist) {
+            acc.BillingCountryCode = 'US';
+            return;
+        }
+        Schema.DescribeFieldResult textDesc = Account.BillingCountry.getDescribe();
+        if (textDesc != null && textDesc.isCreateable()) {
+            acc.BillingCountry = 'United States';
+        }
+    }
+
     @AuraEnabled
     public static Account createAccount(
         String name, 
@@ -129,64 +142,47 @@ public with sharing class QuickAccountController {
     }
 
     @AuraEnabled
-    public static Account createSimpleAccount(
-        String name,
-        String phone,
-        String website,
-        String industry,
-        String type,
-        String description,
-        String billingStreet,
-        String billingCity,
-        String billingState,
-        String billingPostalCode,
-        String billingCountry
-    ) {
+    public static Account createSimpleAccount(String name, String phone, String website, String industry) {
         try {
-            // Billing State/Province requires Billing Country. After-insert automation may set state
-            // on update; default country when omitted so FIELD_INTEGRITY does not fail.
-            String country = String.isNotBlank(billingCountry) ? billingCountry : 'United States';
-
-            Account newAcc = new Account(
-                Name = name,
-                Phone = phone,
-                Website = website,
-                Industry = industry,
-                BillingCountry = country
-            );
-
-            if (String.isNotBlank(type)) {
-                newAcc.Type = type;
-            }
-            if (String.isNotBlank(description)) {
-                newAcc.Description = description;
-            }
-            if (String.isNotBlank(billingStreet)) {
-                newAcc.BillingStreet = billingStreet;
-            }
-            if (String.isNotBlank(billingCity)) {
-                newAcc.BillingCity = billingCity;
-            }
-            if (String.isNotBlank(billingState)) {
-                newAcc.BillingState = billingState;
-            }
-            if (String.isNotBlank(billingPostalCode)) {
-                newAcc.BillingPostalCode = billingPostalCode;
-            }
-            
-            // Allow duplicates for demo purposes
             Database.DMLOptions dml = new Database.DMLOptions();
-            dml.DuplicateRuleHeader.allowSave = true; 
+            dml.DuplicateRuleHeader.allowSave = true;
             dml.DuplicateRuleHeader.runAsCurrentUser = true;
-            
-            Database.SaveResult sr = Database.insert(newAcc, dml);
-            
-            if (sr.isSuccess()) {
-                return newAcc;
-            }
-            throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
-            return null;
 
+            Account full = new Account(Name = name);
+            if (String.isNotBlank(phone)) {
+                full.Phone = phone;
+            }
+            if (String.isNotBlank(website)) {
+                full.Website = website;
+            }
+            if (String.isNotBlank(industry)) {
+                full.Industry = industry;
+            }
+            applyDefaultBillingCountryOnly(full);
+
+            Account phoneOnly = new Account(Name = name);
+            if (String.isNotBlank(phone)) {
+                phoneOnly.Phone = phone;
+            }
+            applyDefaultBillingCountryOnly(phoneOnly);
+
+            Account countryOnly = new Account(Name = name);
+            applyDefaultBillingCountryOnly(countryOnly);
+
+            Account nameOnly = new Account(Name = name);
+
+            Account[] attempts = new List<Account>{ full, phoneOnly, countryOnly, nameOnly };
+            Database.SaveResult lastSr;
+
+            for (Account candidate : attempts) {
+                lastSr = Database.insert(candidate, dml);
+                if (lastSr.isSuccess()) {
+                    return candidate;
+                }
+            }
+
+            throwAuraMessage('Error: ' + lastSr.getErrors()[0].getMessage());
+            return null;
         } catch (AuraHandledException e) {
             throw e;
         } catch (DmlException e) {
