@@ -1,4 +1,15 @@
 public with sharing class QuickAccountController {
+    /**
+     * AuraHandledException only surfaces its message to LWC/Aura clients when setMessage() is called.
+     * Without it, the client shows a generic "Script-thrown exception".
+     */
+    private static void throwAuraMessage(String message) {
+        String safe = String.isNotBlank(message) ? message : 'An unexpected error occurred.';
+        AuraHandledException e = new AuraHandledException(safe);
+        e.setMessage(safe);
+        throw e;
+    }
+
     @AuraEnabled
     public static Account createAccount(
         String name, 
@@ -99,12 +110,15 @@ public with sharing class QuickAccountController {
             if (sr.isSuccess()) {
                 return newAcc;
             } else {
-                throw new AuraHandledException('Error: ' + sr.getErrors()[0].getMessage());
+                throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
             }
 
+        } catch (AuraHandledException e) {
+            throw e;
+        } catch (DmlException e) {
+            throwAuraMessage(e.getDmlMessage(0));
         } catch (Exception e) {
-            // Pass the error back to the LWC
-            throw new AuraHandledException(e.getMessage());
+            throwAuraMessage(e.getMessage());
         }
     }
 
@@ -133,12 +147,15 @@ public with sharing class QuickAccountController {
             if (sr.isSuccess()) {
                 return newAcc;
             } else {
-                throw new AuraHandledException('Error: ' + sr.getErrors()[0].getMessage());
+                throwAuraMessage('Error: ' + sr.getErrors()[0].getMessage());
             }
 
+        } catch (AuraHandledException e) {
+            throw e;
+        } catch (DmlException e) {
+            throwAuraMessage(e.getDmlMessage(0));
         } catch (Exception e) {
-            // Pass the error back to the LWC
-            throw new AuraHandledException(e.getMessage());
+            throwAuraMessage(e.getMessage());
         }
     }
 }
