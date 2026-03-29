@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2. Install Node.js (Required for Salesforce CLI)
+      # 2. Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -36,36 +36,6 @@ jobs:
           rm auth_url.txt
 
       # 5. Deploy Code to Salesforce
-      # This pushes your Apex/LWC changes to the Org
+      # When this finishes successfully, GitHub sends a 'workflow_run' webhook to Jataka.
       - name: Deploy Source
         run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
-
-      # 6. Trigger Kamikaze (One-Backend)
-      # We manually fire the webhook so Kamikaze only starts IF deployment passes
-      - name: Trigger Kamikaze Webhook
-        if: success()
-        run: |
-          curl -X POST "${{ secrets.ONE_BACKEND_URL }}/api/integrations/github/webhook" \
-          -H "Content-Type: application/json" \
-          -H "x-github-event: push" \
-          -d '{
-            "ref": "refs/heads/main",
-            "repository": {
-              "full_name": "${{ github.repository }}",
-              "clone_url": "https://github.com/${{ github.repository }}.git",
-              "owner": { "name": "${{ github.repository_owner }}" },
-              "name": "${{ github.event.repository.name }}"
-            },
-            "installation": {
-              "id": "104501433" 
-            },
-            "commits": [
-              {
-                "id": "${{ github.sha }}",
-                "message": "${{ github.event.head_commit.message }}",
-                "author": { "name": "${{ github.actor }}" },
-                "added": [],
-                "modified": ["force-app/main/default/classes/AccountTrigger.cls"] 
-              }
-            ]
-          }'
