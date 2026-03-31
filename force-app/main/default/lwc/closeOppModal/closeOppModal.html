@@ -1,0 +1,32 @@
+<template>
+    <lightning-quick-action-panel title="Close Opportunity">
+        <lightning-combobox
+            name="stage"
+            label="Stage"
+            value={stage}
+            options={stageOptions}
+            onchange={handleStageChange}
+            required>
+        </lightning-combobox>
+
+        <template if:true={isClosedLost}>
+            <lightning-combobox
+                name="lossReason"
+                label="Loss Reason"
+                value={lossReason}
+                options={lossReasonOptions}
+                required>
+            </lightning-combobox>
+            <lightning-textarea
+                name="lossComments"
+                label="Loss Comments"
+                required>
+            </lightning-textarea>
+        </template>
+
+        <div slot="footer">
+            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>
