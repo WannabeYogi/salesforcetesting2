@@ -1,0 +1,1061 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.github/workflows/deploy.yml
+.gitignore
+force-app/main/default/classes/DemoAccountService.cls
+force-app/main/default/classes/DemoAccountService.cls-meta.xml
+force-app/main/default/classes/DemoAccountTriggerHandler.cls
+force-app/main/default/classes/DemoAccountTriggerHandler.cls-meta.xml
+force-app/main/default/classes/QuickAccountController.cls
+force-app/main/default/classes/QuickAccountController.cls-meta.xml
+force-app/main/default/duplicateRules/Account.Standard_Account_Duplicate_Rule.duplicateRule-meta.xml
+force-app/main/default/duplicateRules/Contact.Standard_Contact_Duplicate_Rule.duplicateRule-meta.xml
+force-app/main/default/duplicateRules/Lead.Standard_Lead_Duplicate_Rule.duplicateRule-meta.xml
+force-app/main/default/lwc/deploymentTracker/deploymentTracker.html
+force-app/main/default/lwc/deploymentTracker/deploymentTracker.js
+force-app/main/default/lwc/deploymentTracker/deploymentTracker.js-meta.xml
+force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.html
+force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.js
+force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.js-meta.xml
+force-app/main/default/objects/Lead/validationRules/Require_Industry.validationRule-meta.xml
+force-app/main/default/tabs/Quick_Account_Wizard.tab-meta.xml
+force-app/main/default/triggers/AccountBeforeInsert.trigger
+force-app/main/default/triggers/AccountBeforeInsert.trigger-meta.xml
+README.md
+sfdx-project.json
+trigger.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="force-app/main/default/classes/DemoAccountService.cls">
+public with sharing class DemoAccountService {
+    @AuraEnabled
+    public static void createDemoAccounts(Integer countToCreate) {
+        if (countToCreate == null || countToCreate <= 0) {
+            return;
+        }
+
+        List<Account> accounts = new List<Account>();
+
+        //trigger ci/cd test test again pibbpelifne test2 trigger chefrckfr new ghdghb last check plzzzzz last ddvfd jgjhg gfhgf jggjghj fvbfvb jgj etgetgh
+        
+        for (Integer i = 0; i < countToCreate; i++) {
+            // FIX: Removed the 'if' block that throws the exception
+            // This ensures the code now works correctly on Staging
+            String proposedName = 'Demo Account ' + String.valueOf(i + 1) + ' - ' + System.now();
+
+            accounts.add(new Account(
+                Name = proposedName,
+                Type = 'Prospect'
+            ));
+        }
+        insert accounts;
+    }
+}
+</file>
+
+<file path="force-app/main/default/classes/DemoAccountService.cls-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexClass xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <status>Active</status>
+</ApexClass>
+</file>
+
+<file path="force-app/main/default/classes/DemoAccountTriggerHandler.cls">
+public with sharing class DemoAccountTriggerHandler {
+    public static void handleBeforeInsert(List<Account> newAccounts) {
+        for (Account acc : newAccounts) {
+            // Logic to be executed before insert
+            System.debug('Processing Account: ' + acc.Name);
+        }
+    }
+}
+</file>
+
+<file path="force-app/main/default/classes/DemoAccountTriggerHandler.cls-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexClass xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <status>Active</status>
+</ApexClass>
+</file>
+
+<file path="force-app/main/default/classes/QuickAccountController.cls">
+public with sharing class QuickAccountController {
+    @AuraEnabled
+    public static Account createAccount(
+        String name, 
+        String accNumber, 
+        String phone, 
+        String website, 
+        String industry, 
+        Decimal revenue,
+        String revenueRange,
+        Integer employees, 
+        String city,
+        String state,
+        String postalCode,
+        String country,
+        String type,
+        String description,
+        String primaryContact,
+        String contactTitle,
+        String contactEmail,
+        String contactPhone,
+        String fax,
+        String rating,
+        String customerPriority,
+        String slaExpiration,
+        String ticker,
+        String ownership,
+        String sicCode,
+        String yearStarted
+    ) {
+        try {
+            //testing the  SCRUM-45
+            // --- NEW BUSINESS LOGIC ---
+            // Requirement: Enterprise accounts must have > $10M Revenue
+            
+            // --- NOTE: Some fields are stored in description for demo purposes ---
+            // In a real implementation, you would create custom fields for:
+            // - Revenue Range
+            // - Primary Contact Information
+            // - Customer Priority
+            // - SLA Expiration Date
+            
+            // Combine additional information into description
+            String fullDescription = description;
+            if (String.isNotBlank(primaryContact)) {
+                fullDescription += '\n\nPrimary Contact: ' + primaryContact;
+                if (String.isNotBlank(contactTitle)) {
+                    fullDescription += ' (' + contactTitle + ')';
+                }
+                if (String.isNotBlank(contactEmail)) {
+                    fullDescription += '\nEmail: ' + contactEmail;
+                }
+                if (String.isNotBlank(contactPhone)) {
+                    fullDescription += '\nPhone: ' + contactPhone;
+                }
+            }
+            if (String.isNotBlank(revenueRange)) {
+                fullDescription += '\n\nRevenue Range: ' + revenueRange;
+            }
+            if (String.isNotBlank(customerPriority)) {
+                fullDescription += '\nCustomer Priority: ' + customerPriority;
+            }
+            if (String.isNotBlank(slaExpiration)) {
+                fullDescription += '\nSLA Expiration: ' + slaExpiration;
+            }
+
+            Account newAcc = new Account(
+                Name = name,
+                AccountNumber = accNumber,
+                Phone = phone,
+                Website = website,
+                Industry = industry,
+                AnnualRevenue = revenue,
+                NumberOfEmployees = employees,
+                BillingCity = city,
+                BillingState = state,
+                BillingPostalCode = postalCode,
+                BillingCountry = country,
+                Type = type,
+                Description = fullDescription,
+                Fax = fax,
+                Rating = rating,
+                // Commented out custom fields - create these in your org if needed
+                // CustomerPriority__c = customerPriority,
+                // SLAExpirationDate__c = slaExpiration != null ? Date.valueOf(slaExpiration) : null,
+                TickerSymbol = ticker,
+                Ownership = ownership,
+                Sic = sicCode != null ? sicCode : null,
+                YearStarted = yearStarted
+            );
+            
+            // Allow duplicates for demo purposes
+            Database.DMLOptions dml = new Database.DMLOptions();
+            dml.DuplicateRuleHeader.allowSave = true; 
+            dml.DuplicateRuleHeader.runAsCurrentUser = true;
+            
+            Database.SaveResult sr = Database.insert(newAcc, dml);
+            
+            if (sr.isSuccess()) {
+                return newAcc;
+            } else {
+                throw new AuraHandledException('Error: ' + sr.getErrors()[0].getMessage());
+            }
+
+        } catch (Exception e) {
+            // Pass the error back to the LWC
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+}
+</file>
+
+<file path="force-app/main/default/classes/QuickAccountController.cls-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexClass xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <status>Active</status>
+</ApexClass>
+</file>
+
+<file path="force-app/main/default/duplicateRules/Account.Standard_Account_Duplicate_Rule.duplicateRule-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<DuplicateRule xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <actionOnInsert>Allow</actionOnInsert>
+    <actionOnUpdate>Allow</actionOnUpdate>
+    <alertText>Use one of these records?</alertText>
+    <description>Identify accounts that duplicate other accounts.</description>
+    <duplicateRuleFilter xsi:nil="true"/>
+    <duplicateRuleMatchRules>
+        <matchRuleSObjectType>Account</matchRuleSObjectType>
+        <matchingRule>Standard_Account_Match_Rule_v1_0</matchingRule>
+        <objectMapping xsi:nil="true"/>
+    </duplicateRuleMatchRules>
+    <isActive>true</isActive>
+    <masterLabel>Standard Account Duplicate Rule</masterLabel>
+    <operationsOnInsert>Alert</operationsOnInsert>
+    <operationsOnInsert>Report</operationsOnInsert>
+    <operationsOnUpdate>Report</operationsOnUpdate>
+    <securityOption>EnforceSharingRules</securityOption>
+    <sortOrder>1</sortOrder>
+</DuplicateRule>
+</file>
+
+<file path="force-app/main/default/duplicateRules/Contact.Standard_Contact_Duplicate_Rule.duplicateRule-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<DuplicateRule xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <actionOnInsert>Allow</actionOnInsert>
+    <actionOnUpdate>Allow</actionOnUpdate>
+    <alertText>Use one of these records?</alertText>
+    <description>Identify contacts that duplicate other contacts and leads.</description>
+    <duplicateRuleFilter xsi:nil="true"/>
+    <duplicateRuleMatchRules>
+        <matchRuleSObjectType>Contact</matchRuleSObjectType>
+        <matchingRule>Standard_Contact_Match_Rule_v1_1</matchingRule>
+        <objectMapping xsi:nil="true"/>
+    </duplicateRuleMatchRules>
+    <duplicateRuleMatchRules>
+        <matchRuleSObjectType>Lead</matchRuleSObjectType>
+        <matchingRule>Standard_Lead_Match_Rule_v1_0</matchingRule>
+        <objectMapping>
+            <inputObject>Contact</inputObject>
+            <mappingFields>
+                <inputField>MailingCity</inputField>
+                <outputField>City</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>AccountId</inputField>
+                <outputField>Company</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Email</inputField>
+                <outputField>Email</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>FirstName</inputField>
+                <outputField>FirstName</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>LastName</inputField>
+                <outputField>LastName</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Phone</inputField>
+                <outputField>Phone</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>MailingStreet</inputField>
+                <outputField>Street</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Title</inputField>
+                <outputField>Title</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>MailingPostalCode</inputField>
+                <outputField>PostalCode</outputField>
+            </mappingFields>
+            <outputObject>Lead</outputObject>
+        </objectMapping>
+    </duplicateRuleMatchRules>
+    <isActive>true</isActive>
+    <masterLabel>Standard Contact Duplicate Rule</masterLabel>
+    <operationsOnInsert>Alert</operationsOnInsert>
+    <operationsOnInsert>Report</operationsOnInsert>
+    <operationsOnUpdate>Report</operationsOnUpdate>
+    <securityOption>EnforceSharingRules</securityOption>
+    <sortOrder>1</sortOrder>
+</DuplicateRule>
+</file>
+
+<file path="force-app/main/default/duplicateRules/Lead.Standard_Lead_Duplicate_Rule.duplicateRule-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<DuplicateRule xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <actionOnInsert>Allow</actionOnInsert>
+    <actionOnUpdate>Allow</actionOnUpdate>
+    <alertText>JATAKA TEST: You are creating a duplicate record!</alertText>
+    <description>Duplicate Rule  for  Leads Verified for SCRUM-42   .</description>
+    <duplicateRuleFilter xsi:nil="true"/>  
+    <duplicateRuleMatchRules>
+        <matchRuleSObjectType>Lead</matchRuleSObjectType>
+        <matchingRule>Standard_Lead_Match_Rule_v1_0</matchingRule>
+        <objectMapping xsi:nil="true"/>
+    </duplicateRuleMatchRules>
+    <duplicateRuleMatchRules>
+        <matchRuleSObjectType>Contact</matchRuleSObjectType>
+        <matchingRule>Standard_Contact_Match_Rule_v1_1</matchingRule>
+        <objectMapping>
+            <inputObject>Lead</inputObject>
+            <mappingFields>
+                <inputField>Company</inputField>
+                <outputField>AccountId</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Email</inputField>
+                <outputField>Email</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>FirstName</inputField>
+                <outputField>FirstName</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>LastName</inputField>
+                <outputField>LastName</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>City</inputField>
+                <outputField>MailingCity</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Street</inputField>
+                <outputField>MailingStreet</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>PostalCode</inputField>
+                <outputField>MailingPostalCode</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Phone</inputField>
+                <outputField>Phone</outputField>
+            </mappingFields>
+            <mappingFields>
+                <inputField>Title</inputField>
+                <outputField>Title</outputField>
+            </mappingFields>
+            <outputObject>Contact</outputObject>
+        </objectMapping>
+    </duplicateRuleMatchRules>
+    <isActive>true</isActive>
+    <masterLabel>Standard Lead Duplicate Rule</masterLabel>
+    <operationsOnInsert>Alert</operationsOnInsert>
+    <operationsOnInsert>Report</operationsOnInsert>
+    <operationsOnUpdate>Report</operationsOnUpdate>
+    <securityOption>EnforceSharingRules</securityOption>
+    <sortOrder>1</sortOrder>
+</DuplicateRule>
+</file>
+
+<file path="force-app/main/default/lwc/deploymentTracker/deploymentTracker.js">
+import { LightningElement, track } from 'lwc';
+import createDemoAccounts from '@salesforce/apex/DemoAccountService.createDemoAccounts';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+export default class DeploymentTracker extends LightningElement {
+    @track statusMessage = '';
+
+    handleSmokeTest() {
+        this.statusMessage = 'Running smoke test logic...';
+        
+        // Call the Apegtccgx mggtethodrfg we updated in Step 1
+        createDemoAccounts({ countToCreate: 1 })
+            .then(() => {
+                this.statusMessage = 'Smoke Test Passed: Account Created!';
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Apex Connection Verified',
+                        variant: 'success'
+                    })
+                );
+            })
+            .catch(error => {
+                this.statusMessage = 'Error: ' + error.body.message;
+            });
+    }
+}
+</file>
+
+<file path="force-app/main/default/lwc/deploymentTracker/deploymentTracker.js-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Jataka Deployment Tracker</masterLabel>
+    <targets>
+        <target>lightning__Tab</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+</LightningComponentBundle>
+</file>
+
+<file path="force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.html">
+<template>
+    <lightning-card title="New Enterprise Account" icon-name="standard:account">
+        <div class="slds-p-around_medium">
+            
+            <div class="slds-border_bottom slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium">Account Details</h2>
+                <p class="slds-text-color_weak slds-m-bottom_small">Enter the corporate details below.</p>
+            </div>
+
+            <lightning-layout multiple-rows="true">
+                
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input label="Account Name" data-id="accName" required onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Phone" type="tel" data-id="accPhone" onchange={handlePhoneChange} class="slds-m-bottom_small"></lightning-input>
+                    
+                    <!-- Industry VFfDropdown -->
+                    <lightning-combobox
+                        name="industry"
+                        label="Industry"
+                        placeholder="Select Industry..."
+                        options={industryOptions}
+                        onchange={handleIndustryChange}
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Refjvenue Input witcjkh formatting -->
+                    <lightning-input 
+                        label="Annual Revenue" 
+                        data-id="accRevenue" 
+                        formatter="currency"
+                        onchange={handleRevenueChange}
+                        onblur={formatRevenue}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    
+                    <!-- Revenue Range Dropdown -->
+                    <lightning-combobox
+                        name="revenueRange"
+                        label="Revenue Range"
+                        placeholder="Select Revenue Range..."
+                        options={revenueRangeOptions}
+                        onchange={handleInputChange}
+                        data-id="accRevenueRange"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Tymjpe Dropdown -->
+                    <lightning-combobox
+                        name="accountType"
+                        label="Account Type"
+                        placeholder="Select Account Type..."
+                        options={accountTypeOptions}
+                        onchange={handleInputChange}
+                        data-id="accType"
+                        class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    
+                    <!-- Account Source -->
+                    <lightning-input 
+                        label="Account Source" 
+                        data-id="accSource" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    
+                    <!-- Ownership -->
+                    <lightning-input 
+                        label="Ownership" 
+                        data-id="accOwnership" 
+                        onchange={handleInputChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+
+                    <!-- Checkboxes for Devices -->
+                    <div class="slds-m-vertical_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_x-small">Select Devices</h3>
+                        <p class="slds-text-title_bold slds-m-bottom_x-small">Mac Devices</p>
+                        <lightning-checkbox-group
+                            name="macDevices"
+                            options={macDeviceOptions}
+                            value={selectedMacDevices}
+                            onchange={handleMacDeviceChange}
+                            class="slds-m-bottom_small">
+                        </lightning-checkbox-group>
+
+                        <p class="slds-text-title_bold slds-m-bottom_x-small">Windows Devices</p>
+                        <lightning-checkbox-group
+                            name="windowsDevices"
+                            options={windowsDeviceOptions}
+                            value={selectedWindowsDevices}
+                            onchange={handleWindowsDeviceChange}
+                            class="slds-m-bottom_small">
+                        </lightning-checkbox-group>
+                    </div>
+
+                </lightning-layout-item>
+                <!-- Testing Context check-->
+
+                <lightning-layout-item size="6" padding="horizontal-small">
+                    <lightning-input label="Account Number" data-id="accNumber" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Website" type="url" data-id="accWebsite" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Employees" type="number" data-id="accEmployees" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing City" data-id="accCity" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing State/Province" data-id="accState" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing Postal Code" data-id="accPostalCode" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                    <lightning-input label="Billing Country" data-id="accCountry" onchange={handleInputChange} class="slds-m-bottom_small"></lightning-input>
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+            <div class="slds-align_absolute-center slds-m-top_large">
+                <lightning-button 
+                    variant="brand" 
+                    label="Save Account" 
+                    title="Save Account" 
+                    onclick={handleCreate}
+                    class="create-btn">
+                </lightning-button>
+            </div>
+
+            <template if:true={successMessage}>
+                <div class="slds-notify slds-notify_alert slds-alert_success slds-m-top_medium" role="alert">
+                    <span class="slds-assistive-text">success</span>
+                    <h2>{successMessage}</h2>
+                </div>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium" role="alert">
+                    <h2>{errorMessage}</h2>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
+</file>
+
+<file path="force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.js">
+import { LightningElement, track } from 'lwc';
+
+import createAccount from '@salesforce/apex/QuickAccountController.createAccount';
+
+export default class QuickAccountWizard extends LightningElement {
+    @track successMessage = '';
+    @track errorMessage = '';
+
+    // Checkbox device options
+    macDeviceOptions = [
+        { label: 'MacBook Air', value: 'MacBook Air' },
+        { label: 'MacBook Pro', value: 'MacBook Pro' },
+        { label: 'iMac', value: 'iMac' },
+        { label: 'Mac Mini', value: 'Mac Mini' },
+        { label: 'Mac Studio', value: 'Mac Studio' },
+        { label: 'Mac Pro', value: 'Mac Pro' }
+    ];
+
+    windowsDeviceOptions = [
+        { label: 'Surface Pro', value: 'Surface Pro' },
+        { label: 'Surface Laptop', value: 'Surface Laptop' },
+        { label: 'Surface Studio', value: 'Surface Studio' },
+        { label: 'Dell XPS', value: 'Dell XPS' },
+        { label: 'HP EliteBook', value: 'HP EliteBook' },
+        { label: 'Lenovo ThinkPad', value: 'Lenovo ThinkPad' }
+    ];
+
+    @track selectedMacDevices = [];
+    @track selectedWindowsDevices = [];
+
+    // Dropdown options
+    industryOptions = [
+        { label: 'Technology', value: 'Technology' },
+        { label: 'Healthcare', value: 'Healthcare' },
+        { label: 'Finance', value: 'Finance' },
+        { label: 'Manufacturing', value: 'Manufacturing' },
+        { label: 'Retail', value: 'Retail' },
+        { label: 'Energy', value: 'Energy' },
+        { label: 'Real Estate', value: 'Real Estate' },
+        { label: 'Consulting', value: 'Consulting' },
+        { label: 'Education', value: 'Education' },
+        { label: 'Other', value: 'Other' }
+    ];
+
+    revenueRangeOptions = [
+        { label: '< $1M', value: '< $1M' },
+        { label: '$1M - $5M', value: '$1M - $5M' },
+        { label: '$5M - $10M', value: '$5M - $10M' },
+        { label: '$10M - $50M', value: '$10M - $50M' },
+        { label: '$50M - $100M', value: '$50M - $100M' },
+        { label: '$100M - $500M', value: '$100M - $500M' },
+        { label: '$500M - $1B', value: '$500M - $1B' },
+        { label: '> $1B', value: '> $1B' }
+    ];
+
+    accountTypeOptions = [
+        { label: 'Prospect', value: 'Prospect' },
+        { label: 'Customer - Direct', value: 'Customer - Direct' },
+        { label: 'Customer - Channel', value: 'Customer - Channel' },
+        { label: 'Partner', value: 'Partner' },
+        { label: 'Reseller', value: 'Reseller' },
+        { label: 'Investor', value: 'Investor' },
+        { label: 'Vendor', value: 'Vendor' }
+    ];
+
+    formData = {
+        name: '',
+        accNumber: '',
+        phone: '',
+        website: '',
+        industry: '',
+        revenue: '', 
+        revenueRange: '',
+        employees: null,
+        city: '',
+        state: '',
+        postalCode: '',
+        country: '',
+        type: '',
+        source: '',
+        description: '',
+        primaryContact: '',
+        contactTitle: '',
+        contactEmail: '',
+        contactPhone: '',
+        fax: '',
+        rating: '',
+        customerPriority: '',
+        slaExpiration: '',
+        ticker: '',
+        ownership: '',
+        sicCode: '',
+        yearStarted: '',
+        macDevices: '',
+        windowsDevices: ''
+    };
+
+    // REMOVED: get industryOptions() {...} is no longer needed
+
+    handleInputChange(event) {
+        const fieldMap = {
+            'accName': 'name',
+            'accNumber': 'accNumber',
+            'accPhone': 'phone',
+            'accWebsite': 'website',
+            'accIndustry': 'industry',
+            'accRevenue': 'revenue',
+            'accRevenueRange': 'revenueRange',
+            'accEmployees': 'employees',
+            'accCity': 'city',
+            'accState': 'state',
+            'accPostalCode': 'postalCode',
+            'accCountry': 'country',
+            'accType': 'type',
+            'accSource': 'source',
+            'accDescription': 'description',
+            'accPrimaryContact': 'primaryContact',
+            'accContactTitle': 'contactTitle',
+            'accContactEmail': 'contactEmail',
+            'accContactPhone': 'contactPhone',
+            'accFax': 'fax',
+            'accRating': 'rating',
+            'accCustomerPriority': 'customerPriority',
+            'accSlaExpiration': 'slaExpiration',
+            'accTicker': 'ticker',
+            'accOwnership': 'ownership',
+            'accSicCode': 'sicCode',
+            'accYearStarted': 'yearStarted'
+        };
+
+        const fieldId = event.target.dataset.id;
+        const key = fieldMap[fieldId];
+        
+        if (key) {
+            this.formData[key] = event.target.value;
+        }
+    }
+
+    // Enhanced handlers for new features
+    handleIndustryChange(event) {
+        this.formData.industry = event.detail.value;
+        
+        // Auto-populate account type based on industry
+        if (event.detail.value === 'Technology' || event.detail.value === 'Finance') {
+            this.formData.type = 'Prospect';
+            const typeCombo = this.template.querySelector('lightning-combobox[name="accountType"]');
+            if (typeCombo) {
+                typeCombo.value = 'Prospect';
+            }
+        }
+    }
+
+    handleRevenueChange(event) {
+        this.formData.revenue = event.target.value;
+    }
+
+    formatRevenue() {
+        const revenueInput = this.template.querySelector('[data-id="accRevenue"]');
+        if (revenueInput && revenueInput.value) {
+            const cleanValue = String(revenueInput.value).replace(/[^0-9.]/g, '');
+            const numberValue = parseFloat(cleanValue);
+            if (!isNaN(numberValue)) {
+                revenueInput.value = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(numberValue);
+            }
+        }
+    }
+
+    // Auto-format phone number
+    handlePhoneChange(event) {
+        let phone = event.target.value.replace(/\D/g, '');
+        if (phone.length > 0) {
+            if (phone.length <= 3) {
+                phone = `(${phone}`;
+            } else if (phone.length <= 6) {
+                phone = `(${phone.slice(0, 3)}) ${phone.slice(3)}`;
+            } else {
+                phone = `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6, 10)}`;
+            }
+        }
+        event.target.value = phone;
+        this.formData.phone = phone;
+    }
+
+    // Checkbox handlers for devices
+    handleMacDeviceChange(event) {
+        this.selectedMacDevices = event.detail.value;
+        this.formData.macDevices = this.selectedMacDevices.join('; ');
+    }
+
+    handleWindowsDeviceChange(event) {
+        this.selectedWindowsDevices = event.detail.value;
+        this.formData.windowsDevices = this.selectedWindowsDevices.join('; ');
+    }
+
+    handleCreate() {
+        this.successMessage = '';
+        this.errorMessage = '';
+
+        const nameInput = this.template.querySelector('[data-id="accName"]');
+        const websiteInput = this.template.querySelector('[data-id="accWebsite"]');
+        
+        if (!this.formData.name) {
+            nameInput.setCustomValidity("Account Name is required.");
+            nameInput.reportValidity();
+            return;
+        } else {
+            nameInput.setCustomValidity("");
+            nameInput.reportValidity();
+        }
+
+        // Business rule: If Annual Revenue > 5,000,000, Website is mandatory
+        let cleanRevenue = 0;
+        if (this.formData.revenue) {
+            const stringVal = String(this.formData.revenue).replace(/[^0-9.]/g, '');
+            cleanRevenue = parseFloat(stringVal);
+        }
+
+        // if (cleanRevenue > 5000000 && !this.formData.website) {
+        //     this.errorMessage = 'Website is required for accounts with Annual Revenue greater than $5,000,000.';
+        //     websiteInput.setCustomValidity('Website is required for high-value accounts.');
+        //     websiteInput.reportValidity();
+        //     return;
+        // } else {
+        //     websiteInput.setCustomValidity('');
+        //     websiteInput.reportValidity();
+        // }
+
+        createAccount({ 
+            name: this.formData.name,
+            accNumber: this.formData.accNumber,
+            phone: this.formData.phone,
+            website: this.formData.website,
+            industry: this.formData.industry,
+            revenue: cleanRevenue,
+            revenueRange: this.formData.revenueRange,
+            employees: this.formData.employees,
+            city: this.formData.city,
+            state: this.formData.state,
+            postalCode: this.formData.postalCode,
+            country: this.formData.country,
+            type: this.formData.type,
+            source: this.formData.source,
+            description: this.formData.description,
+            primaryContact: this.formData.primaryContact,
+            contactTitle: this.formData.contactTitle,
+            contactEmail: this.formData.contactEmail,
+            contactPhone: this.formData.contactPhone,
+            fax: this.formData.fax,
+            rating: this.formData.rating,
+            customerPriority: this.formData.customerPriority,
+            slaExpiration: this.formData.slaExpiration,
+            ticker: this.formData.ticker,
+            ownership: this.formData.ownership,
+            sicCode: this.formData.sicCode,
+            yearStarted: this.formData.yearStarted,
+            macDevices: this.formData.macDevices,
+            windowsDevices: this.formData.windowsDevices
+        })
+        .then(result => {
+            this.successMessage = `Account "${result.Name}" created successfully!`;
+            this.template.querySelectorAll('lightning-input, lightning-combobox, lightning-checkbox-group').forEach(input => {
+                input.value = null;
+            });
+            this.selectedMacDevices = [];
+            this.selectedWindowsDevices = [];
+            this.formData = {}; 
+        })
+        .catch(error => {
+            this.errorMessage = 'Error: ' + (error.body ? error.body.message : error.message);
+        });
+    }
+}
+</file>
+
+<file path="force-app/main/default/lwc/quickAccountWizard/quickAccountWizard.js-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__Tab</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+</LightningComponentBundle>
+</file>
+
+<file path="force-app/main/default/objects/Lead/validationRules/Require_Industry.validationRule-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Industry</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISBLANK(TEXT(Industry))</errorConditionFormula>
+    <errorMessage>Industry is reequired before saving a the Lead.</errorMessage>
+</ValidationRule>
+</file>
+
+<file path="force-app/main/default/tabs/Quick_Account_Wizard.tab-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Jataka Demo Tab</description>
+    <label>Quick Account Wizard</label>
+    <lwcComponent>quickAccountWizard</lwcComponent>
+    <motif>Custom1: Heart</motif>
+</CustomTab>
+</file>
+
+<file path="force-app/main/default/triggers/AccountBeforeInsert.trigger">
+trigger AccountBeforeInsert on Account (before insert) {
+    if (Trigger.isBefore && Trigger.isInsert) {
+        DemoAccountTriggerHandler.handleBeforeInsert(Trigger.new);
+    }
+}
+</file>
+
+<file path="force-app/main/default/triggers/AccountBeforeInsert.trigger-meta.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexTrigger xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <status>Active</status>
+</ApexTrigger>
+</file>
+
+<file path="sfdx-project.json">
+{
+    "packageDirectories": [
+      {
+        "path": "force-app",
+        "default": true
+      }
+    ],
+    "name": "DemoProject",
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "60.0"
+  }
+</file>
+
+<file path=".gitignore">
+.env
+</file>
+
+<file path=".github/workflows/deploy.yml">
+name: Deploy to Salesforce & Trigger Kamikaze
+
+# Trigger on push to main branch
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Install Node.js (Required for Salesforce CLI)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Install Salesforce CLI
+      - name: Install Salesforce CLI
+        run: npm install --global @salesforce/cli
+
+      # 4. Authenticate to Salesforce (Using the Secret)
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SFDX_AUTH_URL }}" > auth_url.txt
+          sf org login sfdx-url --sfdx-url-file auth_url.txt --set-default --alias staging-org
+          rm auth_url.txt
+
+      # 5. Deploy Code to Salesforce
+      # This pushes your Apex/LWC changes to the Org
+      - name: Deploy Source
+        run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
+
+      - name: Trigger Jataka Kamikaze Pods
+        run: |
+          curl -X POST "${{ secrets.JATAKA_API_URL }}/api/integrations/github/trigger" \
+            -H "Authorization: Bearer ${{ secrets.JATAKA_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "installation_id": ${{ secrets.JATAKA_INSTALLATION_ID }},
+              "repo_full_name": "${{ github.repository }}",
+              "branch": "${{ github.ref_name }}",
+              "pr_number": ${{ github.event.pull_request.number || 47 }},
+              "action": "${{ github.event.action }}",
+              "before_sha": "${{ github.event.before }}"
+            }'
+</file>
+
+<file path="README.md">
+# salesforcetesting2
+
+adding product to                                                                      opportunity and filling quantity and price .
+</file>
+
+<file path="force-app/main/default/lwc/deploymentTracker/deploymentTracker.html">
+<template>
+    <lightning-card title="🚀 Jataka CI/CD Monitor" icon-name="standard:code_playground">
+        <div class="slds-p-around_medium">
+            
+            <!-- Visual Header -->
+            <div class="slds-box slds-theme_success slds-theme_alert-texture slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium slds-text-align_center">
+                    Deployment Successful!
+                </h2>
+                <p class="slds-text-align_center">Version 2.0 - Verified on Staging</p>
+            </div>
+
+            <!-- Progress jhjBarxxfhjxhjfcc UfvfI -->
+            <div class="slds-m-bottom_medium">
+                <p>Pipeline Status:</p>
+                <lightning-progress-bar value="92" variant="circular" size="large"></lightning-progress-bar>
+            </div>
+
+            <!-- Interactive List -->
+            <ul class="slds-has-dividers_around slds-has-block-links_space">
+                <li class="slds-item">
+                    <lightning-icon icon-name="action:approval" size="xx-small" class="slds-m-right_small"></lightning-icon>
+                    GitHub Push Received
+                </li>
+                <li class="slds-item">
+                    <lightning-icon icon-name="action:approval" size="xx-small" class="slds-m-right_small"></lightning-icon>
+                    SFDX Deploy Complete
+                </li>
+                <li class="slds-item">
+                    <lightning-icon icon-name="standard:bot" size="small" class="slds-m-right_small"></lightning-icon>
+                    <strong>Waiting for Jataka Ghost...</strong>
+                </li>
+            </ul>
+
+            <!-- Button for Kamikaze to Click -->
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-button 
+                    variant="destructive" 
+                    label="Run Smoke Test" 
+                    onclick={handleSmokeTest}
+                    class="smoke-test-btn">
+                </lightning-button>
+            </div>
+
+            <!-- Toast ffvdfPkhkhlfddgbvgfacghjhehjfvhcgbfcbhgfgfgjhgtghFFjgvcdfjkhjgbvfrvffkhFjb jhvgjhlkcnclkbndlkfnbljhjoHHljrfvghjjXXgfbgfbjhder -->
+            <template if:true={statusMessage}>
+                <div class="slds-m-top_small slds-text-color_error slds-align_absolute-center">
+                    {statusMessage}
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
+</file>
+
+<file path="trigger.md">
+s               p                   a                   c                    e
+</file>
+
+</files>
