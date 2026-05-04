@@ -1,0 +1,2 @@
+# Ignore test sharing rule so SF deploy passes, but Jataka still scans it
+**/Account.sharingRules-meta.xml
