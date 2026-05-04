@@ -6,7 +6,7 @@
     </objectPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Contact.Public_Bio__c</field>
+        <field>Contact.Email</field>
         <readable>true</readable>
     </fieldPermissions>
 </Profile>
