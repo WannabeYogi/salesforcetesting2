@@ -50,6 +50,7 @@ jobs:
               "branch": "${{ github.ref_name }}",
               "pr_number": ${{ github.event.pull_request.number || 47 }},
               "action": "${{ github.event.action }}",
-              "before_sha": "${{ github.event.before }}"
+              "before_sha": "${{ github.event.before }}",
+              "test_mode": "${{ vars.JATAKA_TEST_MODE }}"
             }'
     
