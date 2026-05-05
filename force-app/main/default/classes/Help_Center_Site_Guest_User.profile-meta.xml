@@ -10,4 +10,8 @@
         <field>Contact.Email</field>
         <readable>true</readable>
     </fieldPermissions>
+    <classAccesses>
+        <apexClass>PublicDataAPI</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 </Profile>
