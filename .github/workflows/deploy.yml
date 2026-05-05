@@ -36,8 +36,8 @@ jobs:
 
       # 5. Deploy Code to Salesforce
       # This pushes your Apex/LWC changes to the Org
-      - name: Deploy Source
-        run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
+      # - name: Deploy Source
+      #   run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
 
       - name: Trigger Jataka Kamikaze Pods
         run: |
@@ -50,6 +50,7 @@ jobs:
               "branch": "${{ github.ref_name }}",
               "pr_number": ${{ github.event.pull_request.number || 47 }},
               "action": "${{ github.event.action }}",
-              "before_sha": "${{ github.event.before }}"
+              "before_sha": "${{ github.event.before }}",
+              "test_mode": "${{ vars.JATAKA_TEST_MODE }}"
             }'
     
