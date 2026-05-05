@@ -36,8 +36,8 @@ jobs:
 
       # 5. Deploy Code to Salesforce
       # This pushes your Apex/LWC changes to the Org
-      - name: Deploy Source
-        run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
+      # - name: Deploy Source
+      #   run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
 
       - name: Trigger Jataka Kamikaze Pods
         run: |
