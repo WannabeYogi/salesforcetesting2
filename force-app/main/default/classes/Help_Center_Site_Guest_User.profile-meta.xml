@@ -11,6 +11,6 @@
     </fieldPermissions>
     <classAccesses>
         <apexClass>PublicDataAPI</apexClass>
-        <enabled>true</enabled>
+        <enabled>true </enabled>
     </classAccesses>
 </Profile>

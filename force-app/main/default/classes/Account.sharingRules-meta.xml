@@ -9,7 +9,7 @@
         </sharedTo>
         <criteriaItems>
             <field>Is_Public__c</field>
-            <operation>equals</operation>
+            <operation>equals </operation>
             <value>True</value>
         </criteriaItems>
     </sharingGuestRules>
