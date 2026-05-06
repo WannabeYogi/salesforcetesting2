@@ -2,11 +2,10 @@ name: Deploy to Salesforce & Trigger Kamikaze
 
 # Trigger on push to main branch
 on:
-  push:
-    branches: [ "main", "test2", "test4" ]
-    paths-ignore:
-      - 'README.md'
-      - '.github/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
 
 jobs:
   deploy-and-test:
@@ -37,7 +36,21 @@ jobs:
 
       # 5. Deploy Code to Salesforce
       # This pushes your Apex/LWC changes to the Org
-      - name: Deploy Source
-        run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
+      # - name: Deploy Source
+      #   run: sf project deploy start --target-org staging-org --source-dir force-app --wait 10
 
+      - name: Trigger Jataka Kamikaze Pods
+        run: |
+          curl -X POST "${{ secrets.JATAKA_API_URL }}/api/integrations/github/trigger" \
+            -H "Authorization: Bearer ${{ secrets.JATAKA_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "installation_id": ${{ secrets.JATAKA_INSTALLATION_ID }},
+              "repo_full_name": "${{ github.repository }}",
+              "branch": "${{ github.ref_name }}",
+              "pr_number": ${{ github.event.pull_request.number || 47 }},
+              "action": "${{ github.event.action }}",
+              "before_sha": "${{ github.event.before }}",
+              "test_mode": "${{ vars.JATAKA_TEST_MODE }}"
+            }'
     
