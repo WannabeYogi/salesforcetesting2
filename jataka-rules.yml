@@ -1,0 +1,40 @@
+version: 1
+rules:
+  - id: NO_WITHOUT_SHARING
+    description: Apex classes must not use "without sharing".
+    severity: critical
+    applies_to:
+      file_patterns:
+        - "**/*.cls"
+    detect:
+      any_contains:
+        - "without sharing class"
+    violation_message: 'Do not expose data context using "without sharing". Use "with sharing" or "inherited sharing".'
+
+  - id: NO_HARDCODED_SECRETS
+    description: Hardcoded API keys, tokens, or passwords are forbidden.
+    severity: critical
+    applies_to:
+      file_patterns:
+        - "**/*.cls"
+        - "**/*.js"
+    detect:
+      any_contains:
+        - "apiKey = '"
+        - "password = '"
+        - "token = '"
+        - "SECRET="
+    violation_message: "Move secrets to protected config/custom metadata. Never commit secrets."
+
+  - id: NO_SENSITIVE_SSN_QUERY
+    description: SSN fields must not be selected directly in Apex queries.
+    severity: high
+    applies_to:
+      file_patterns:
+        - "**/*.cls"
+    detect:
+      any_contains:
+        - "SELECT Id, Name, SSN__c"
+        - "SELECT Id, SSN__c"
+        - "SELECT SSN__c"
+    violation_message: "Direct SSN__c access is disallowed. Use masked/tokenized access patterns."
