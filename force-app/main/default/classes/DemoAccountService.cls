@@ -1,10 +1,13 @@
 public with sharing class DemoAccountService {
+    @AuraEnabled
     public static void createDemoAccounts(Integer countToCreate) {
         if (countToCreate == null || countToCreate <= 0) {
             return;
         }
 
         List<Account> accounts = new List<Account>();
+
+        //trigger ci/cd test test again pibbpelifne test2 trigger chefrckfr new ghdghb last check plzzzzz last ddvfd jgjhg gfhgf jggjghj fvbfvb jgj etgetgh
         
         for (Integer i = 0; i < countToCreate; i++) {
             String proposedName = 'Demo Account ' + String.valueOf(i + 2);
@@ -22,10 +25,10 @@ public with sharing class DemoAccountService {
             // ----------------------------------------
 
             accounts.add(new Account(
-                Name = proposedName
+                Name = proposedName,
+                Type = 'Prospect'
             ));
         }
         insert accounts;
-        // End of method - No contacts created here on Main
     }
 }
